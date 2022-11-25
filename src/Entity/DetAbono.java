@@ -10,11 +10,15 @@ public class DetAbono {
     private Double saldo;
     private Integer id_lectura_pago;
     private Integer id_tipo_pago;
+    private String folio_ventanilla;
+    private int id_desc;
 
-    public DetAbono(Double abono, Integer id_lect_pago, Integer id_tipo_pago) {
+    public DetAbono(Double abono, Integer id_lectura_pago, Integer id_tipo_pago,Integer id_desc, String folio_ventanilla) {
         this.abono = abono;
-        this.id_lectura_pago = id_lect_pago;
+        this.id_lectura_pago = id_lectura_pago;
         this.id_tipo_pago = id_tipo_pago;
+        this.id_desc = id_desc;
+        this.folio_ventanilla = folio_ventanilla;
     }
 
     public Date getFechaHora() {
@@ -63,6 +67,22 @@ public class DetAbono {
 
     public void setId_tipo_pago(Integer id_tipo_pago) {
         this.id_tipo_pago = id_tipo_pago;
+    }
+
+    public String getFolio_ventanilla() {
+        return folio_ventanilla;
+    }
+
+    public void setFolio_ventanilla(String folio_ventanilla) {
+        this.folio_ventanilla = folio_ventanilla;
+    }
+
+    public int getId_desc() {
+        return id_desc;
+    }
+
+    public void setId_desc(int id_desc) {
+        this.id_desc = id_desc;
     }
     
 }

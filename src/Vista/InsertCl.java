@@ -1425,7 +1425,6 @@ public class InsertCl extends javax.swing.JPanel {
     private void Mostrar() {
         String fech = Año.getText() + "-" + Mes.getText() + "-" + Dia.getText();
         Date fec = Date.valueOf(fech);
-        System.out.println("entrando");
         ClienteServicio cs = new ClienteServicio();
         String status = "activo";
         folio_cte = cs.InsertarCliente(name.getText(), ap_p.getText(), ap_m.getText(),

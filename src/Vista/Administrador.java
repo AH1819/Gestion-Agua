@@ -1,13 +1,9 @@
 package Vista;
 
-import Entity.Cat_descuento;
-import Entity.Cat_pago;
-import Entity.DetTipoconsumoTarifa;
+import Entity.Contrato;
 import Entity.LecturaPago;
-import Servicio.CatalogosServicio;
-import Servicio.DescuentoServicio;
+import Servicio.ContratoServicio;
 import Servicio.LecturaPagoServicio;
-import Servicio.TarifaServicio;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,10 +15,11 @@ public class Administrador extends javax.swing.JPanel {
 
     boolean c;
     boolean validator = false;
+    boolean Precio_fijo = false;
 
     public Administrador() {
         initComponents();
-
+        Importe.setVisible(false);
         new MostrarC().show();
         fecha();
     }
@@ -31,16 +28,8 @@ public class Administrador extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Cargando = new javax.swing.JLabel();
         Principal = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        Descuentos = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        Tarifa = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Pago = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         lectura = new javax.swing.JTable();
@@ -58,66 +47,15 @@ public class Administrador extends javax.swing.JPanel {
         id_mes = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
         Informacion = new javax.swing.JTextArea();
+        fijo = new javax.swing.JCheckBox();
+        Importe = new javax.swing.JTextField();
 
-        setBackground(new java.awt.Color(204, 204, 0));
+        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Descuentos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(Descuentos);
-
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(337, 6, -1, -1));
-
-        Principal.addTab("Descuentos", jPanel2);
-
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Tarifa.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(Tarifa);
-
-        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(276, 6, -1, -1));
-
-        Principal.addTab("Tarifas", jPanel3);
-
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Pago.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(Pago);
-
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 833, 248));
-
-        Principal.addTab("Tipos de pago", jPanel4);
+        Cargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Cargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8-spinner-para-iphone.gif"))); // NOI18N
+        add(Cargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 1030, 540));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -236,10 +174,21 @@ public class Administrador extends javax.swing.JPanel {
         jPanel1.add(id_mes, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, 80, 30));
 
         Informacion.setColumns(20);
+        Informacion.setLineWrap(true);
         Informacion.setRows(5);
+        Informacion.setWrapStyleWord(true);
         jScrollPane5.setViewportView(Informacion);
 
         jPanel1.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 180, 150));
+
+        fijo.setText("Costo fijo");
+        fijo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fijoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fijo, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 300, 90, 30));
+        jPanel1.add(Importe, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 300, 80, 30));
 
         Principal.addTab("Lecturas", jPanel1);
 
@@ -261,31 +210,52 @@ public class Administrador extends javax.swing.JPanel {
                 for (int i = 0; i < y; i++) {
                     int folio = Integer.parseInt(lectura.getValueAt(i, 0).toString());
                     if (folio == Integer.parseInt(Dato.getText())) {
-                        System.out.println(i);
                         x = i;
-                        if (i != 0) {
-                            xy = true;
-                        }
-                        System.out.println(x);
+                        xy = true;
                     }
                 }
                 if (xy) {
                     if (lectura.getValueAt(x, 7).equals("Limite excedido")) {
                         new Thread() {
+                            @Override
                             public void run() {
                                 InsertarLecturaPago();
                             }
                         }.start();
                     } else {
                         JOptionPane.showMessageDialog(null, "Todavia no se requiere una nueva lectura\n para este contrato", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-
                     }
                 }
-
             }
+        }
 
+        if (validator) {//valida si desea agregar una nueva lectura
+            if (fijo.isSelected()) {//..............si esta seleccionado
+                InsertarLecturaPagoFijo(Float.valueOf(Importe.getText()), Integer.parseInt(Dato.getText()), Integer.parseInt(id_mes.getText()));
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Incorrecto el consumo", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            int x = 0;
+            boolean xy = false;
+            int y = lectura.getRowCount();
+            for (int i = 0; i < y; i++) {
+                int folio = Integer.parseInt(lectura.getValueAt(i, 0).toString());
+                if (folio == Integer.parseInt(Dato.getText())) {
+                    x = i;
+                    xy = true;
+                }
+            }
+            if (xy) {
+                if (lectura.getValueAt(x, 7).equals("Limite excedido")) {
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            InsertarLecturaPagoFijo(Float.valueOf(Importe.getText()), Integer.parseInt(Dato.getText()), Integer.parseInt(id_mes.getText()));
+                        }
+                    }.start();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Todavia no se requiere una nueva lectura\n para este contrato", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -390,6 +360,23 @@ public class Administrador extends javax.swing.JPanel {
             evt.consume();
         }
     }//GEN-LAST:event_DatoKeyTyped
+
+    private void fijoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fijoActionPerformed
+        if (fijo.isSelected()) {
+            Inicial.setEnabled(false);
+            LFinal.setEnabled(false);
+            Consumo.setEnabled(false);
+            Importe.setVisible(true);
+            Precio_fijo = true;
+        } else {
+            Inicial.setEnabled(true);
+            LFinal.setEnabled(true);
+            Consumo.setEnabled(true);
+            Importe.setVisible(false);
+            Precio_fijo = false;
+        }
+
+    }//GEN-LAST:event_fijoActionPerformed
     public class MostrarC implements Runnable {
 
         public void show() {
@@ -397,14 +384,26 @@ public class Administrador extends javax.swing.JPanel {
         }
 
         public void run() {
+            Cargando.setVisible(true);
             Principal.setVisible(false);
-            Tipo_pago();
             MostrarLecturas();
-            desccat();
-            tarifas();
             Principal.setVisible(true);
             deber();
+            Cargando.setVisible(false);
+        }
+    }
 
+    private void InsertarLecturaPagoFijo(float lecturapago, int folio, int mes) {
+        LecturaPagoServicio lps = new LecturaPagoServicio();
+        lecturapago = lps.InsertarLecturapagoFijo(lecturapago, folio, mes);
+
+        if (lecturapago == -1) {
+            JOptionPane.showMessageDialog(null, "Lectura no se pudo registrar", "Error", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            //actualizar el tabla cuando se inserta
+            JOptionPane.showMessageDialog(null, "Lectura se registro", "Correcto", JOptionPane.INFORMATION_MESSAGE);
+            MostrarLecturas();
+            deber();
         }
     }
 
@@ -421,7 +420,6 @@ public class Administrador extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Lectura se registro", "Correcto", JOptionPane.INFORMATION_MESSAGE);
             MostrarLecturas();
             deber();
-
         }
     }
 
@@ -462,14 +460,17 @@ public class Administrador extends javax.swing.JPanel {
         int tam = lista.size();
         int inicial = 0;
         if (tam == 0) {
-            int dialogButton = JOptionPane.showConfirmDialog(this, "El contrato no cuenta con una lectura\n ¿Desea añadir una nueva lectura?", "", JOptionPane.YES_NO_OPTION);
+            //boolean existe = Existencia(folio);
+            if (Existencia(folio)) {
+                int dialogButton = JOptionPane.showConfirmDialog(this, "El contrato no cuenta con una lectura\n ¿Desea añadir una nueva lectura?", "", JOptionPane.YES_NO_OPTION);
 
-            if (JOptionPane.YES_OPTION == dialogButton) {
-                Inicial.setText(String.valueOf(inicial));
-                validator = true;
-            } else {
-                //JOptionPane.showMessageDialog(this, "No se registro la nueva lectura", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                validator = false;
+                if (JOptionPane.YES_OPTION == dialogButton) {
+                    Inicial.setText(String.valueOf(inicial));
+                    validator = true;
+                } else {
+                    //JOptionPane.showMessageDialog(this, "No se registro la nueva lectura", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    validator = false;
+                }
             }
         } else {
             LFinal.setText("");
@@ -483,73 +484,24 @@ public class Administrador extends javax.swing.JPanel {
         }
     }
 
+    private boolean Existencia(int folio) {
+        boolean existe = false;
+        ContratoServicio cs = new ContratoServicio();
+        List<Contrato> lista = cs.SearchContrato_c(folio);
+        int tam = lista.size();
+        System.out.println(folio);
+        System.out.println(tam);
+        if (tam == 0) {
+            JOptionPane.showMessageDialog(this, "Contrato no registrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            existe = true;
+        }
+        return existe;
+    }
+
     private void fecha() {
         id_mes.setText(String.valueOf(LocalDate.now().getMonthValue()));
         id_mes.setEditable(false);
-    }
-
-    private void tarifas() {
-        TarifaServicio ds = new TarifaServicio();
-        List<DetTipoconsumoTarifa> lista = ds.Tarifas(WIDTH);
-        int tam = lista.size();
-        String list[][] = new String[tam][3];
-        if (tam == 0) {
-            JOptionPane.showMessageDialog(this, "No se encontro registro alguno", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            for (int i = 0; i < tam; i++) {
-                list[i][0] = lista.get(i).getConsec().toString();
-                list[i][1] = lista.get(i).getId_consumo().toString();
-                list[i][2] = lista.get(i).getTarifa().toString();
-            }
-            Tarifa.setModel(new javax.swing.table.DefaultTableModel(
-                    list,
-                    new String[]{
-                        "Consec", "Id consumo", "Tarifa"
-                    }));
-        }
-    }
-
-    private void desccat() {
-        DescuentoServicio ds = new DescuentoServicio();
-        List<Cat_descuento> lista = ds.ObtenerDescuentos();
-        int tam = lista.size();
-        String list[][] = new String[tam][5];
-        if (tam == 0) {
-            JOptionPane.showMessageDialog(this, "No se encontro registro alguno", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            for (int i = 0; i < tam; i++) {
-                list[i][0] = lista.get(i).getId_desc().toString();
-                list[i][1] = lista.get(i).getFecha_inc().toString();
-                list[i][2] = lista.get(i).getFecha_fin().toString();
-                list[i][3] = lista.get(i).getDescripcion();
-                list[i][4] = lista.get(i).getPorcentaje().toString();
-            }
-            Descuentos.setModel(new javax.swing.table.DefaultTableModel(
-                    list,
-                    new String[]{
-                        "Id", "Fecha inicio", "Fecha fin", "Descripcion", "Porcentaje"
-                    }));
-        }
-    }
-
-    private void Tipo_pago() {
-        CatalogosServicio cs = new CatalogosServicio();
-        List<Cat_pago> lista = cs.Tipo_pagos();
-        int tam = lista.size();
-        String list[][] = new String[tam][2];
-        if (tam == 0) {
-            JOptionPane.showMessageDialog(this, "No se encontro registro alguno", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            for (int i = 0; i < tam; i++) {
-                list[i][0] = lista.get(i).getId_pago().toString();
-                list[i][1] = lista.get(i).getTipo_pago();
-            }
-            Pago.setModel(new javax.swing.table.DefaultTableModel(
-                    list,
-                    new String[]{
-                        "Id", "Tipo de pago"
-                    }));
-        }
     }
 
     private void MostrarLecturas() {
@@ -559,6 +511,12 @@ public class Administrador extends javax.swing.JPanel {
         String list[][] = new String[tam][7];
         if (tam == 0) {
             JOptionPane.showMessageDialog(this, "No se encontro registro alguno", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            lectura.setModel(new javax.swing.table.DefaultTableModel(
+                    list,
+                    new String[]{
+                        "Folio contrato", "Consumo", "Cliente", "Id lectura", "Fecha lectura", "Periodo", "Tiempo transcurrido", "x"
+
+                    }));
         } else {
             for (int i = 0; i < tam; i++) {
                 list[i][0] = lista.get(i).getFolio_contrato().toString();
@@ -585,15 +543,15 @@ public class Administrador extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Cargando;
     private javax.swing.JTextField Consumo;
     private javax.swing.JTextField Dato;
-    private javax.swing.JTable Descuentos;
+    private javax.swing.JTextField Importe;
     private javax.swing.JTextArea Informacion;
     private javax.swing.JTextField Inicial;
     private javax.swing.JTextField LFinal;
-    private javax.swing.JTable Pago;
     private javax.swing.JTabbedPane Principal;
-    private javax.swing.JTable Tarifa;
+    private javax.swing.JCheckBox fijo;
     private javax.swing.JTextField id_mes;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
@@ -603,12 +561,6 @@ public class Administrador extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable lectura;

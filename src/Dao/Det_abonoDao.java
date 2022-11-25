@@ -17,7 +17,7 @@ public class Det_abonoDao {
     public int InsertarDetAbono(DetAbono detabono){
         int ret = 0;
 
-        String sql = "insert into det_abono(abono,id_lect_pago,id_tipo_pago) values (?,?,?)";
+        String sql = "insert into det_abono(abono,id_lect_pago,id_tipo_pago,id_desc,ticket_ventanilla) values (?,?,?,?,?)";
         PreparedStatement comando = null;
         
         try {
@@ -26,6 +26,8 @@ public class Det_abonoDao {
             comando.setDouble(1, detabono.getAbono());
             comando.setInt(2, detabono.getId_lectura_pago());
             comando.setInt(3, detabono.getId_tipo_pago());
+            comando.setInt(4, detabono.getId_desc());
+            comando.setString(5, detabono.getFolio_ventanilla());
             System.out.println(comando);
             comando.executeUpdate();
 

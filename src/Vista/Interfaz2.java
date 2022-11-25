@@ -4,7 +4,10 @@ import Entity.ErrorsAndSuccesses;
 import Entity.Logeo;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Image;
 import java.time.LocalDate;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.greenrobot.eventbus.EventBus;
@@ -21,9 +24,13 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     public Interfaz2() {
         initComponents();
+
         this.setLocationRelativeTo(null);
         LocalDate now = LocalDate.now();
-
+        ImageIcon imgIcon = new ImageIcon(getClass().getResource("/Imagenes/logogspa.png"));
+        Image imgEscalada = imgIcon.getImage().getScaledInstance(260, 110, Image.SCALE_SMOOTH);
+        Icon iconoEscalado = new ImageIcon(imgEscalada);
+        Logo.setIcon(iconoEscalado);
         int year = now.getYear();
         int dia = now.getDayOfMonth();
         int month = now.getMonthValue();
@@ -41,10 +48,8 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         if (p0.getUsuario().equals("administrador") || p0.getUsuario().equals("postgres")) {
             Admin.setVisible(true);
-            btn_reports.setVisible(true);
         } else {
             Admin.setVisible(false);
-            btn_reports.setVisible(false);
         }
         new Thread() {
             public void run() {
@@ -72,7 +77,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         Background = new javax.swing.JPanel();
         Menu = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        Logo = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btn_prin = new javax.swing.JPanel();
         Princ = new javax.swing.JLabel();
@@ -86,12 +91,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         btn_clientes = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        btn_reports = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        Admin = new javax.swing.JPanel();
-        Admin_l = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         Login_exit = new javax.swing.JPanel();
         Admin_l1 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -99,6 +98,9 @@ public class Interfaz2 extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         About = new javax.swing.JLabel();
         espacio = new javax.swing.JPanel();
+        Admin = new javax.swing.JPanel();
+        Admin_l = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         content = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -119,11 +121,10 @@ public class Interfaz2 extends javax.swing.JFrame {
         Menu.setPreferredSize(new java.awt.Dimension(270, 431));
         Menu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("GSPA");
-        Menu.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 260, 50));
+        Logo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        Logo.setForeground(new java.awt.Color(255, 255, 255));
+        Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Menu.add(Logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 260, 110));
         Menu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 200, 20));
 
         btn_prin.setBackground(new java.awt.Color(21, 101, 192));
@@ -228,58 +229,6 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         Menu.add(btn_clientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 260, 50));
 
-        btn_reports.setBackground(new java.awt.Color(18, 90, 173));
-        btn_reports.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_reportsMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_reportsMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btn_reportsMousePressed(evt);
-            }
-        });
-        btn_reports.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/file-chart.png"))); // NOI18N
-        btn_reports.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
-
-        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Reportes");
-        btn_reports.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 70, 30));
-
-        Menu.add(btn_reports, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 260, 50));
-
-        Admin.setBackground(new java.awt.Color(18, 90, 173));
-        Admin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                AdminMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                AdminMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                AdminMousePressed(evt);
-            }
-        });
-        Admin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Admin_l.setBackground(new java.awt.Color(255, 255, 255));
-        Admin_l.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Admin_l.setForeground(new java.awt.Color(255, 255, 255));
-        Admin_l.setText("Administrador");
-        Admin.add(Admin_l, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 110, 30));
-
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8-administrador-del-sistema-macho-32 (1).png"))); // NOI18N
-        Admin.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
-
-        Menu.add(Admin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 260, 50));
-
         Login_exit.setBackground(new java.awt.Color(18, 90, 173));
         Login_exit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Login_exit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -347,6 +296,33 @@ public class Interfaz2 extends javax.swing.JFrame {
             }
         });
         espacio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Admin.setBackground(new java.awt.Color(18, 90, 173));
+        Admin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                AdminMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                AdminMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                AdminMousePressed(evt);
+            }
+        });
+        Admin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Admin_l.setBackground(new java.awt.Color(255, 255, 255));
+        Admin_l.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Admin_l.setForeground(new java.awt.Color(255, 255, 255));
+        Admin_l.setText("Administrador");
+        Admin.add(Admin_l, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 110, 30));
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8-administrador-del-sistema-macho-32 (1).png"))); // NOI18N
+        Admin.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
+
+        espacio.add(Admin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 50));
+
         Menu.add(espacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 260, 200));
 
         Background.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 640));
@@ -471,7 +447,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_prinMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_prinMouseExited
         if (btn_service.getBackground().getRGB() != -15574355 || btn_contrato.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 || btn_reports.getBackground().getRGB() != -15574355
+                || btn_clientes.getBackground().getRGB() != -15574355 
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_prin);
@@ -483,7 +459,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_service);
         resetColor(btn_contrato);
         resetColor(btn_clientes);
-        resetColor(btn_reports);
         resetColor(Admin);
         resetColor(Aboutus);
         p1.setSize(1030, 479);
@@ -503,7 +478,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_serviceMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_serviceMouseExited
         if (btn_prin.getBackground().getRGB() != -15574355 || btn_contrato.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 || btn_reports.getBackground().getRGB() != -15574355
+                || btn_clientes.getBackground().getRGB() != -15574355 
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_service);
@@ -523,7 +498,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_contratoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_contratoMouseExited
         if (btn_prin.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 || btn_reports.getBackground().getRGB() != -15574355
+                || btn_clientes.getBackground().getRGB() != -15574355
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_contrato);
@@ -550,7 +525,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_clientesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_clientesMouseExited
         if (btn_prin.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
-                || btn_contrato.getBackground().getRGB() != -15574355 || btn_reports.getBackground().getRGB() != -15574355
+                || btn_contrato.getBackground().getRGB() != -15574355
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_clientes);
@@ -569,40 +544,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_clientesMousePressed
 
-    private void btn_reportsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMouseEntered
-
-        if (btn_reports.getBackground().getRGB() == -15574355) {
-            setColor(btn_reports);
-        }
-    }//GEN-LAST:event_btn_reportsMouseEntered
-
-    private void btn_reportsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMouseExited
-        if (Admin.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
-                || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
-                || Login_exit.getBackground().getRGB() != -15574355) {
-            resetColor(btn_reports);
-        }
-    }//GEN-LAST:event_btn_reportsMouseExited
-
-    private void btn_reportsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMousePressed
-        setColor(btn_reports);
-        resetColor(btn_service);
-        resetColor(btn_contrato);
-        resetColor(btn_clientes);
-        resetColor(Admin);
-        resetColor(btn_prin);
-
-        Reportes p1 = new Reportes();
-        p1.setSize(1030, 479);
-        p1.setLocation(0, 0);
-
-        content.removeAll();
-        content.add(p1, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
-    }//GEN-LAST:event_btn_reportsMousePressed
-
     private void AdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdminMouseEntered
 
         if (Admin.getBackground().getRGB() == -15574355) {
@@ -611,7 +552,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_AdminMouseEntered
 
     private void AdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdminMouseExited
-        if (btn_reports.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
+        if (btn_service.getBackground().getRGB() != -15574355
                 || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
                 || btn_clientes.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
@@ -624,7 +565,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_service);
         resetColor(btn_contrato);
         resetColor(btn_clientes);
-        resetColor(btn_reports);
         resetColor(btn_prin);
 
         Administrador p1 = new Administrador();
@@ -644,7 +584,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_Login_exitMouseEntered
 
     private void Login_exitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Login_exitMouseExited
-        if (btn_reports.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
+        if ( btn_service.getBackground().getRGB() != -15574355
                 || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
                 || btn_clientes.getBackground().getRGB() != -15574355 || Admin.getBackground().getRGB() != -15574355
                 || Aboutus.getBackground().getRGB() != -15574355) {
@@ -711,7 +651,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_prin);
         setColor(Aboutus);
         resetColor(btn_clientes);
-        resetColor(btn_reports);
         resetColor(btn_service);
         resetColor(Admin);
         resetColor(btn_contrato);
@@ -727,7 +666,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_AboutusMousePressed
 
     private void AboutusMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AboutusMouseExited
-        if (btn_reports.getBackground().getRGB() != -15574355 || btn_service.getBackground().getRGB() != -15574355
+        if ( btn_service.getBackground().getRGB() != -15574355
                 || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
                 || btn_clientes.getBackground().getRGB() != -15574355 || Admin.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
@@ -784,7 +723,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_prin);
         setColor(btn_contrato);
         resetColor(btn_clientes);
-        resetColor(btn_reports);
         resetColor(btn_service);
         resetColor(Admin);
         resetColor(Aboutus);
@@ -805,7 +743,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         setColor(btn_service);
         resetColor(btn_contrato);
         resetColor(btn_clientes);
-        resetColor(btn_reports);
         resetColor(Admin);
         resetColor(Aboutus);
 
@@ -825,7 +762,6 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_prin);
         setColor(btn_clientes);
         resetColor(btn_contrato);
-        resetColor(btn_reports);
         resetColor(btn_service);
         resetColor(Admin);
         resetColor(Aboutus);
@@ -907,13 +843,13 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JPanel Background;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Login_exit;
+    private javax.swing.JLabel Logo;
     private javax.swing.JPanel Menu;
     private javax.swing.JLabel Princ;
     private javax.swing.JPanel Title;
     private javax.swing.JPanel btn_clientes;
     private javax.swing.JPanel btn_contrato;
     private javax.swing.JPanel btn_prin;
-    private javax.swing.JPanel btn_reports;
     private javax.swing.JPanel btn_service;
     public static javax.swing.JPanel content;
     private javax.swing.JPanel espacio;
@@ -922,12 +858,9 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JLabel home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;

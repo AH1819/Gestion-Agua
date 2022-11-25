@@ -31,18 +31,16 @@ public class Pago extends javax.swing.JPanel {
     String opcion;
     String porcentaje;
     String consumo;
+    String referencias;
+    int id_desc = 0;
+    int id_tipo = 0;
+
     public Pago() {
         initComponents();
+        referencia.setVisible(false);
+        Referencia.setVisible(false);
         Cargando.setVisible(false);
-        N_cte.setEditable(false);
-        Celular.setEditable(false);
-        Municipio.setEditable(false);
-        Residencia.setEditable(false);
-        Manzana.setEditable(false);
-        Lote.setEditable(false);
-        Importe.setEditable(false);
-        contrato.setVisible(false);
-        Contrato.setEditable(false);
+        Generando.setVisible(false);
         new Thread() {
             public void run() {
                 Descuentos();
@@ -86,6 +84,12 @@ public class Pago extends javax.swing.JPanel {
         Mes_adeudo = new javax.swing.JLabel();
         D_pago = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
+        Generando = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Meses_adeudo = new javax.swing.JTextArea();
+        Mes_adeudo1 = new javax.swing.JLabel();
+        referencia = new javax.swing.JTextField();
+        Referencia = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -161,6 +165,7 @@ public class Pago extends javax.swing.JPanel {
         jLabel7.setText("Residencia:");
         add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 70, -1));
 
+        Residencia.setEditable(false);
         Residencia.setBackground(new java.awt.Color(255, 255, 255));
         Residencia.setForeground(new java.awt.Color(0, 0, 0));
         add(Residencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 190, 40));
@@ -170,24 +175,27 @@ public class Pago extends javax.swing.JPanel {
         jLabel8.setText("Celular:");
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, -1, -1));
 
+        Celular.setEditable(false);
         Celular.setBackground(new java.awt.Color(255, 255, 255));
         Celular.setForeground(new java.awt.Color(0, 0, 0));
         add(Celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 150, 230, 40));
 
         jLabel9.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Importe:");
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 210, 70, -1));
+        jLabel9.setText("Deuda total:");
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 210, 100, -1));
 
         jLabel10.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Municipio:");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 70, -1));
 
+        Municipio.setEditable(false);
         Municipio.setBackground(new java.awt.Color(255, 255, 255));
         Municipio.setForeground(new java.awt.Color(0, 0, 0));
         add(Municipio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 210, 40));
 
+        N_cte.setEditable(false);
         N_cte.setBackground(new java.awt.Color(255, 255, 255));
         N_cte.setForeground(new java.awt.Color(0, 0, 0));
         N_cte.addActionListener(new java.awt.event.ActionListener() {
@@ -197,10 +205,12 @@ public class Pago extends javax.swing.JPanel {
         });
         add(N_cte, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 430, 40));
 
+        Lote.setEditable(false);
         Lote.setBackground(new java.awt.Color(255, 255, 255));
         Lote.setForeground(new java.awt.Color(0, 0, 0));
         add(Lote, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 230, 100, 40));
 
+        Manzana.setEditable(false);
         Manzana.setBackground(new java.awt.Color(255, 255, 255));
         Manzana.setForeground(new java.awt.Color(0, 0, 0));
         Manzana.addActionListener(new java.awt.event.ActionListener() {
@@ -228,8 +238,14 @@ public class Pago extends javax.swing.JPanel {
         T_pago.setBackground(new java.awt.Color(255, 255, 255));
         T_pago.setForeground(new java.awt.Color(0, 0, 0));
         T_pago.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        T_pago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                T_pagoActionPerformed(evt);
+            }
+        });
         add(T_pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 310, 190, 40));
 
+        Importe.setEditable(false);
         Importe.setBackground(new java.awt.Color(255, 255, 255));
         Importe.setForeground(new java.awt.Color(0, 0, 0));
         Importe.setText(" Importe a pagar");
@@ -289,6 +305,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 60, 110, 40));
 
+        Contrato.setEditable(false);
         Contrato.setBackground(new java.awt.Color(255, 255, 255));
         Contrato.setForeground(new java.awt.Color(0, 0, 0));
         Contrato.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -315,6 +332,7 @@ public class Pago extends javax.swing.JPanel {
         Cargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando (1).gif"))); // NOI18N
         add(Cargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 50, 60, 60));
 
+        Mes_pagar.setEditable(false);
         Mes_pagar.setBackground(new java.awt.Color(255, 255, 255));
         Mes_pagar.setForeground(new java.awt.Color(0, 0, 0));
         Mes_pagar.setText(" Mes atrasado");
@@ -339,6 +357,31 @@ public class Pago extends javax.swing.JPanel {
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Descuento:");
         add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 290, 120, -1));
+
+        Generando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Generando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando (1).gif"))); // NOI18N
+        add(Generando, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 400, 60, 60));
+
+        Meses_adeudo.setEditable(false);
+        Meses_adeudo.setColumns(20);
+        Meses_adeudo.setRows(5);
+        jScrollPane1.setViewportView(Meses_adeudo);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 210, 100));
+
+        Mes_adeudo1.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        Mes_adeudo1.setForeground(new java.awt.Color(0, 0, 0));
+        Mes_adeudo1.setText("Meses con cargo:");
+        add(Mes_adeudo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 120, 20));
+
+        referencia.setBackground(new java.awt.Color(255, 255, 255));
+        referencia.setForeground(new java.awt.Color(0, 0, 0));
+        add(referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 390, 230, 40));
+
+        Referencia.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        Referencia.setForeground(new java.awt.Color(0, 0, 0));
+        Referencia.setText("Folio de ticket:");
+        add(Referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 370, 90, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void N_cteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_N_cteActionPerformed
@@ -370,12 +413,17 @@ public class Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_BusquedaActionPerformed
 
     private void PagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PagarActionPerformed
-        if(D_pago.getSelectedIndex() == 0){
+        if (D_pago.getSelectedIndex() == 0) {
             porcentaje = "0";
-        }else{
-            porcentaje = D_pago.getSelectedItem().toString();
+        } else {
+            for (String[] Desc : Descuentos) {
+                if (Desc[1].equals(D_pago.getSelectedItem())) {
+                    id_desc = Integer.parseInt(Desc[0]);
+                    porcentaje = Desc[1];
+                }
+            }
         }
-        
+
         if (Importe.getText().equals(" Importe a pagar") || Importe.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un contrato para realizar el pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             Dato.requestFocus();
@@ -388,9 +436,21 @@ public class Pago extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Campo vacio: Tipo de Pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     T_pago.requestFocus();
                 } else {
-                    System.out.println(Lectura_pago);
+                    for (String[] Tipo : Tipo_pago) {
+                        if (Tipo[1].equals(T_pago.getSelectedItem())) {
+                            id_tipo = Integer.parseInt(Tipo[0]);
+                            System.out.println(id_tipo);
+                        }
+                    }
                     new Thread() {
                         public void run() {
+                            Dato.setEditable(false);
+                            Busqueda.setEnabled(false);
+                            Buscar.setEnabled(false);
+                            Pago.setEditable(false);
+                            D_pago.setEnabled(false);
+                            T_pago.setEnabled(false);
+                            Generando.setVisible(true);
                             InsertarPago();
                         }
                     }.start();
@@ -404,8 +464,9 @@ public class Pago extends javax.swing.JPanel {
             Dato.setText(" Ingrese el dato");
         }
     }//GEN-LAST:event_BusquedaMousePressed
-
+int contrato_id = 0;
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        contrato_id = Integer.parseInt(Dato.getText());
         if (!N_cte.getText().isEmpty()) {
             N_cte.setText("");
             Contrato.setText("");
@@ -419,6 +480,7 @@ public class Pago extends javax.swing.JPanel {
             Pago.setText(" Cantidad a pagar");
             T_pago.setSelectedIndex(0);
             D_pago.setSelectedIndex(0);
+            Meses_adeudo.setText("");
         }
 
         if (Busqueda.getSelectedItem().equals("Folio contrato")) {
@@ -506,6 +568,21 @@ public class Pago extends javax.swing.JPanel {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_D_pagoActionPerformed
+
+    private void T_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_T_pagoActionPerformed
+        if (T_pago.getSelectedItem().equals("Ventanilla")) {
+            Referencia.setVisible(true);
+            referencia.setVisible(true);
+            jLabel3.setVisible(true);
+        } else {
+            jLabel3.setVisible(false);
+            Referencia.setVisible(false);
+            referencia.setVisible(false);
+            referencias = "No aplica";
+        }
+
+
+    }//GEN-LAST:event_T_pagoActionPerformed
     public class Hilos implements Runnable {
 
         public void show() {
@@ -531,9 +608,24 @@ public class Pago extends javax.swing.JPanel {
 
         }
     }
+
+    private void Meses_deber(int id) {
+        LecturaPagoServicio lp = new LecturaPagoServicio();
+        List<LecturaPago> lista = lp.Meses_deuda(id);
+        int tam = lista.size();
+        if (tam != 0) {
+            for (int i = 0; i < tam; i++) {
+                Meses_adeudo.append(lista.get(i).getMes() + " " + lista.get(i).getAdeudo().toString() + "\n");
+            }
+        } else {
+            Mes_pagar.setText("No hay deudas");
+        }
+    }
+
     String Lectura_pago;
     String Fecha_pago;
     String mes;
+
     private void Mes(int id) {
         LecturaPagoServicio lp = new LecturaPagoServicio();
         List<LecturaPago> lista = lp.Mes_deuda(id);
@@ -545,6 +637,7 @@ public class Pago extends javax.swing.JPanel {
                 Lectura_pago = lista.get(i).getIdLectPago().toString();
                 Fecha_pago = lista.get(i).getFechaHora().toString();
             }
+            Meses_deber(id);
         } else {
             Mes_pagar.setText("No hay deuda");
         }
@@ -695,38 +788,72 @@ public class Pago extends javax.swing.JPanel {
 
     }
 
+    String[][] Tipo_pago;
+
     private void Tipo_pago() {
         CatalogosServicio cs = new CatalogosServicio();
         List<Cat_pago> lista = cs.Tipo_pago();
         int tam = lista.size();
+        Tipo_pago = new String[tam][2];
         T_pago.addItem("Seleccione una opción");
         for (int i = 0; i < tam; i++) {
+            Tipo_pago[i][0] = lista.get(i).getId_pago().toString();
+            Tipo_pago[i][1] = lista.get(i).getTipo_pago();
             T_pago.addItem(lista.get(i).getTipo_pago());
         }
     }
+
+    String[][] Descuentos;
 
     private void Descuentos() {
         DescuentoServicio ds = new DescuentoServicio();
         List<Cat_descuento> lista = ds.ObtenerDescuentos();
         int tam = lista.size();
+        Descuentos = new String[tam][2];
         D_pago.addItem("Seleccione una opción");
         for (int i = 0; i < tam; i++) {
+            Descuentos[i][0] = lista.get(i).getId_desc().toString();
+            Descuentos[i][1] = lista.get(i).getPorcentaje().toString();
             D_pago.addItem(lista.get(i).getPorcentaje().toString());
         }
     }
     int consec_abono;
 
     private void InsertarPago() {
+        if (T_pago.getSelectedItem().equals("Ventanilla")) {
+            referencias = referencia.getText();
+        }
         AbonoService as = new AbonoService();
-        System.out.println(Lectura_pago);
-        consec_abono = as.Abonar(Integer.parseInt(Pago.getText()), Integer.parseInt(Lectura_pago), T_pago.getSelectedIndex());
+        consec_abono = as.Abonar(Integer.parseInt(Pago.getText()), Integer.parseInt(Lectura_pago), id_tipo, id_desc, referencias);
         if (consec_abono == -1) {
             JOptionPane.showMessageDialog(null, "No se pudo registrar el pago", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Pago exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+
             InsertarTicket();
+
+            Dato.setEditable(true);
+            Busqueda.setEnabled(true);
+            Buscar.setEnabled(true);
+            Pago.setEditable(true);
+            D_pago.setEnabled(true);
+            T_pago.setEnabled(true);
+
+            
+            Contrato.setText("");
+            N_cte.setText("");
+            Celular.setText("");
+            Municipio.setText("");
+            Residencia.setText("");
+            Manzana.setText("");
+            Lote.setText("");
+            Importe.setText(" Deuda total");
+            Mes_pagar.setText(" Mes atrasado");
+            Meses_adeudo.setText("");
+            Pago.setText(" Cantidad a pagar");
+            D_pago.setSelectedIndex(0);
+            T_pago.setSelectedIndex(0);
         }
-        //System.out.println(consec);
     }
     int ticket;
 
@@ -738,19 +865,18 @@ public class Pago extends javax.swing.JPanel {
         if (ticket == -1) {
             JOptionPane.showMessageDialog(null, "Ticket no registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            PrinterJob pj = PrinterJob.getPrinterJob();        
-                pj.setPrintable(new BillPrintable(),getPageFormat(pj));
-                try {
-                  
-                    pj.print();
-                }
-                catch (PrinterException ex) {
-                    ex.printStackTrace();
-                }
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            pj.setPrintable(new BillPrintable(), getPageFormat(pj));
+            try {
+
+                pj.print();
+                Generando.setVisible(false);
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-    
     double bHight = 0.0;
 
     public PageFormat getPageFormat(PrinterJob pj) {
@@ -761,7 +887,7 @@ public class Pago extends javax.swing.JPanel {
         double bodyHeight = bHight;
         double headerHeight = 20.0;
         double footerHeight = 20.0;
-        double width = cm_to_pp(13);
+        double width = cm_to_pp(22);
         double height = cm_to_pp(headerHeight + bodyHeight + footerHeight);
         paper.setSize(width, height);
         paper.setImageableArea(0, 15, width, height - cm_to_pp(1));
@@ -794,7 +920,7 @@ public class Pago extends javax.swing.JPanel {
             pag = Float.parseFloat(Pago.getText());
             imp = Float.parseFloat(Importe.getText());
             float total = imp - pag;
-            
+
             if (pageIndex == 0) {
                 Graphics2D g2d = (Graphics2D) graphics;
                 double width = pageFormat.getImageableWidth();
@@ -804,102 +930,53 @@ public class Pago extends javax.swing.JPanel {
                     int yShift = 12;
                     int headerRectHeight = 15;
                     g2d.setFont(new Font("Monospaced", Font.PLAIN, 9));
-                    g2d.drawImage(icon.getImage(), 550, 6, 80, 70, null);
-                    y += yShift + 30;
-                    g2d.drawString("--------------------------------------------------", 12, y);
-                    y += yShift;
-                    g2d.drawString("GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V.", 12, y);
-                    y += yShift;
-                    g2d.drawString("    CACAHOATAN, CHIAPAS     " + " R.F.C.: " + RFC, 12, y);
-                    y += yShift;
-                    g2d.drawString("---------------------------------------------------", 12, y);
-                    y += yShift;
-                    g2d.drawString(" OPERADOR " + "             " + " Fecha: "+dtf.format(LocalDateTime.now())+"", 12, y);
-                    y += yShift;
-                    g2d.drawString(" " + lo.getUsuario() + "                      " + " Folio de ticket: " + ticket, 12, y);
-                    y += yShift;
-                    g2d.drawString("---------------------------------------------------", 12, y);
-                    y += headerRectHeight;
-                    g2d.drawString("               DATOS DEL CLIENTE                    ", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString(" Nombre: " + N_cte.getText() + "   " + "   ", 10, y);
-                    y += yShift;
-                    g2d.drawString(" Folio del contrato:  " + Dato.getText(), 10, y);
-                    y += yShift;
-                    g2d.drawString(" Domicilio: " + Residencia.getText() + "   ", 10, y);
-                    y += yShift;
-                    g2d.drawString(" Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText(), 10, y);
-                    y += yShift;
-                    g2d.drawString("---------------------------------------------------", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString("               DETALLES DEL PAGO                    ", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString(" Mes del pago:     " + mes + "   ", 10, y);
-                    y += yShift;
-                    g2d.drawString(" Tipo de consumo:  " + consumo + " ", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString(" Importe:      $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString(), 10, y);
-                    y += yShift;
-                    g2d.drawString(" Descuento:    " + porcentaje + " ", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString(" Pago:         $" + Pago.getText() + "", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString(" Resta:        $" + total + "", 10, y);
-                    y += headerRectHeight;
-                    g2d.drawString("***************************************************", 10, y);
-                    y += yShift;
-                    g2d.drawString("           ¡Gracias vuelva pronto!          ", 10, y);
-                    y += yShift;
-                    g2d.drawString("***************************************************", 10, y);
-                    y += headerRectHeight;
-
                     g2d.drawImage(icon.getImage(), 100, 400, 85, 75, null);
                     y += yShift + 100;
-                    g2d.drawString("--------------------------------------------------", 12, y);
+                    g2d.drawString("--------------------------------------------------" + "      " + "--------------------------------------------------", 12, y);
                     y += yShift;
-                    g2d.drawString("GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V.", 12, y);
+                    g2d.drawString("GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V." + "        " + "GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V.", 12, y);
                     y += yShift;
-                    g2d.drawString("    CACAHOATAN, CHIAPAS     " + " R.F.C.: " + RFC, 12, y);
+                    g2d.drawString("    CACAHOATAN, CHIAPAS     " + " R.F.C.: " + RFC + "        " + "    CACAHOATAN, CHIAPAS     " + " R.F.C.: " + RFC, 12, y);
                     y += yShift;
-                    g2d.drawString("---------------------------------------------------", 12, y);
+                    g2d.drawString("--------------------------------------------------" + "      " + "---------------------------------------------------", 12, y);
                     y += yShift;
-                    g2d.drawString(" OPERADOR " + "             " + " Fecha: " + dtf.format(LocalDateTime.now()) + " ", 12, y);
+                    g2d.drawString(" OPERADOR " + "             " + " Fecha: " + dtf.format(LocalDateTime.now()) + " " + "     " + " OPERADOR " + "             " + " Fecha: " + dtf.format(LocalDateTime.now()), 12, y);
                     y += yShift;
-                    g2d.drawString(" " + lo.getUsuario() + "                      " + " Folio de ticket: " + ticket, 12, y);
+                    g2d.drawString(" " + lo.getUsuario() + "              " + " Folio de ticket: " + ticket + "     " + "   " + lo.getUsuario() + "              " + " Folio de ticket: " + ticket, 12, y);
                     y += yShift;
-                    g2d.drawString("---------------------------------------------------", 12, y);
+                    g2d.drawString("---------------------------------------------------" + "     " + "---------------------------------------------------", 12, y);
                     y += headerRectHeight;
-                    g2d.drawString("               DATOS DEL CLIENTE                    ", 10, y);
+                    g2d.drawString("               DATOS DEL CLIENTE                    " + "     " + "               DATOS DEL CLIENTE                    ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Nombre: " + N_cte.getText() + "   " + "   ", 10, y);
+                    g2d.drawString(" Nombre: " + N_cte.getText() + "   " + "   " + "             " + " Nombre: " + N_cte.getText() + "   " + "   ", 10, y);
                     y += yShift;
-                    g2d.drawString(" Folio del contrato:  " + Dato.getText(), 10, y);
+                    g2d.drawString(" Folio del contrato:  " + contrato_id + "                                 " + " Folio del contrato:  " + contrato_id, 10, y);
                     y += yShift;
-                    g2d.drawString(" Domicilio: " + Residencia.getText() + "   ", 10, y);
+                    g2d.drawString(" Domicilio: " + Residencia.getText() + "   " + "                                    " + " Domicilio: " + Residencia.getText() + "   ", 10, y);
                     y += yShift;
-                    g2d.drawString(" Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText(), 10, y);
+                    g2d.drawString(" Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText() + "                       " + " Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText(), 10, y);
                     y += yShift;
-                    g2d.drawString("---------------------------------------------------", 10, y);
+                    g2d.drawString("---------------------------------------------------" + "     " + "---------------------------------------------------", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString("               DETALLES DEL PAGO                    ", 10, y);
+                    g2d.drawString("               DETALLES DEL PAGO                    " + "     " + "               DETALLES DEL PAGO                    ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Mes del pago:     " + mes + "   ", 10, y);
+                    g2d.drawString(" Mes del pago:     " + mes + "   " + "                         " + "Mes del pago:     " + mes + "   ", 10, y);
                     y += yShift;
-                    g2d.drawString(" Tipo de consumo:  " + consumo + " ", 10, y);
+                    g2d.drawString(" Tipo de consumo:  " + consumo + " " + "                        " + " Tipo de consumo:  " + consumo + " ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Cargo generado:    $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString(), 10, y);
+                    g2d.drawString(" Cargo generado:    $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString() + "          " + " Cargo generado:    $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString(), 10, y);
                     y += yShift;
-                    g2d.drawString(" Descuento:         %" + porcentaje + " ", 10, y);
+                    g2d.drawString(" Descuento:         %" + porcentaje + " " + "                               " + " Descuento:         %" + porcentaje + " ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Monto del pago:    $" + Pago.getText() + "", 10, y);
+                    g2d.drawString(" Monto del pago:    $" + Pago.getText() + "" + "                                 " + " Monto del pago:    $" + Pago.getText() + "", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Total:             $" + total + "", 10, y);
+                    g2d.drawString(" Total:             $" + total + "" + "                              " + " Total:             $" + total + "", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString("***************************************************", 10, y);
+                    g2d.drawString("***************************************************" + "     " + "***************************************************", 10, y);
                     y += yShift;
-                    g2d.drawString("           ¡Gracias vuelva pronto!          ", 10, y);
+                    g2d.drawString("           ¡Gracias vuelva pronto!          " + "     " + "                  ¡Gracias vuelva pronto!          ", 10, y);
                     y += yShift;
-                    g2d.drawString("***************************************************", 10, y);
+                    g2d.drawString("***************************************************" + "     " + "***************************************************", 10, y);
                     y += headerRectHeight;
 
                 } catch (Exception e) {
@@ -909,13 +986,13 @@ public class Pago extends javax.swing.JPanel {
             return result;
         }
     }
+
     @Subscribe
     public void Transporte(String v) {
         Dato.setText(v);
         Busqueda.setSelectedItem("Folio contrato");
 
         new Hilos().show();
-
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Buscar;
@@ -925,15 +1002,19 @@ public class Pago extends javax.swing.JPanel {
     private javax.swing.JTextField Contrato;
     private javax.swing.JComboBox<String> D_pago;
     private javax.swing.JTextField Dato;
+    private javax.swing.JLabel Generando;
     private javax.swing.JTextField Importe;
     private javax.swing.JTextField Lote;
     private javax.swing.JTextField Manzana;
     private javax.swing.JLabel Mes_adeudo;
+    private javax.swing.JLabel Mes_adeudo1;
     private javax.swing.JTextField Mes_pagar;
+    private javax.swing.JTextArea Meses_adeudo;
     private javax.swing.JTextField Municipio;
     private javax.swing.JTextField N_cte;
     private javax.swing.JButton Pagar;
     private javax.swing.JTextField Pago;
+    private javax.swing.JLabel Referencia;
     private javax.swing.JTextField Residencia;
     private javax.swing.JComboBox<String> T_pago;
     private javax.swing.JLabel contrato;
@@ -948,6 +1029,8 @@ public class Pago extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField referencia;
     // End of variables declaration//GEN-END:variables
 }

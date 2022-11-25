@@ -45,7 +45,37 @@ public class LecturapagoDao {
             Logger.getLogger(Cat_descuentoDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return CD;
+    }
 
+    public List<LecturaPago> Meses_adeudo(int id) {
+        List<LecturaPago> CD = new ArrayList<>();
+
+        String sql = "select lp.id_lect_pago,lp.fecha_hora,ct.mes,lp.adeudo "
+                + "from lectura_pago lp "
+                + "inner join cat_mes ct "
+                + "on ct.id_m = lp.id_m "
+                + "where lp.folio_contrato = ? "
+                + "and lp.status = 'En Proceso' "
+                + "order by lp.fecha_hora asc";
+        PreparedStatement comando = null;
+
+        try {
+            comando = conexion.conectar().prepareStatement(sql);
+            comando.setInt(1, id);
+            Resultado = comando.executeQuery();
+
+            while (Resultado.next()) {
+                LecturaPago cd = new LecturaPago();
+                cd.setIdLectPago(Resultado.getInt("id_lect_pago"));
+                cd.setFechaHora(Resultado.getDate("fecha_hora"));
+                cd.setAdeudo(Resultado.getDouble("adeudo"));
+                cd.setMes(Resultado.getString("mes"));
+                CD.add(cd);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Cat_descuentoDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return CD;
     }
 
     public List<LecturaPago> MostrarLecturas() {
@@ -130,11 +160,34 @@ public class LecturapagoDao {
 
             conexion.conectar().close();
             comando.close();
-            return ret;
+            ret = 1;
         } catch (SQLException e) {
             Logger.getLogger(ContratoDao.class.getName()).log(Level.SEVERE, null, e);
-            return -1;
+            ret = -1;
         }
+        return ret;
+    }
+    public int InsertarLecturapagoFijo(float lecturapago,int folio,int mes) {
+        int ret = 0;
+        String sql = "insert into lectura_pago(importe,folio_contrato,id_m)values(?,?,?)";
+        PreparedStatement comando = null;
+
+        try {
+            comando = conexion.conectar().prepareStatement(sql);
+            comando.setFloat(1, lecturapago);
+            comando.setInt(2, folio);
+            comando.setInt(3, mes);
+
+            comando.executeUpdate();
+
+            conexion.conectar().close();
+            comando.close();
+            ret = 1;
+        } catch (SQLException e) {
+            Logger.getLogger(ContratoDao.class.getName()).log(Level.SEVERE, null, e);
+            ret = -1;
+        }
+        return ret;
     }
 
 }

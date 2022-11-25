@@ -145,7 +145,7 @@ public class CatalogosDao {
     public List<Cat_pago> Tipo_pago() {
         List<Cat_pago> CP = new ArrayList<>();
 
-        String sql = "select tipo_pago from cat_pago order by id_tipo_pago";
+        String sql = "select * from cat_pago order by id_tipo_pago";
         PreparedStatement comando = null;
 
         try {
@@ -154,6 +154,7 @@ public class CatalogosDao {
 
             while (Resultado.next()) {
                 Cat_pago cp = new Cat_pago();
+                cp.setId_pago(Resultado.getInt("id_tipo_pago"));
                 cp.setTipo_pago(Resultado.getString("tipo_pago"));
                 CP.add(cp);
             }

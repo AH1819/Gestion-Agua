@@ -5,6 +5,8 @@ import Conexion.PersistenciaLogeo;
 import Entity.ErrorsAndSuccesses;
 import Entity.Logeo;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,6 +22,14 @@ public class Login extends javax.swing.JFrame {
         Error.setVisible(false);
         Ocultar.setVisible(false);
         Cargando.setVisible(false);
+    }
+    
+    @Override
+    public Image getIconImage() {
+       Image retValue = Toolkit.getDefaultToolkit().
+             getImage(ClassLoader.getSystemResource("Imagenes/icons8-water-100.png"));
+       
+       return retValue;
     }
 
     @SuppressWarnings("unchecked")
@@ -45,6 +55,7 @@ public class Login extends javax.swing.JFrame {
         Entertxt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(getIconImage());
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(1000, 510));
         setUndecorated(true);
@@ -493,12 +504,6 @@ public class Login extends javax.swing.JFrame {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-    }
-
-    private void ciclo() {
-        for (int i = 0; i < 40000; i++) {
-            System.out.println("contador: " + i);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
