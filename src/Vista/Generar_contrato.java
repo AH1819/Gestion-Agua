@@ -31,7 +31,7 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         int dia = now.getDayOfMonth();
         int month = now.getMonthValue();
         String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-            "Octubre", "Noviembre", "Diciemrbre"};
+            "Octubre", "Noviembre", "Diciembre"};
         Fecha.setText(dia + " de " + meses[month - 1] + " de " + year);
         nombre.setText(cg.getNombre_cliente());
         direccion.setText(cg.getDireccion());
@@ -39,13 +39,15 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         lote.setText(cg.getLote());
         folio_contrato.setText(cg.getFolio_contrato().toString());
         folio_cte.setText(cg.getFolio_cliente().toString());
+        informativo.setText("<html><center>"+cg.getInformativo());
+        creacion.setText(cg.getCreacion_contrato().toString());
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        Imprime = new javax.swing.JButton();
         Imprimir = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -69,22 +71,24 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         direccion = new javax.swing.JLabel();
         lote = new javax.swing.JLabel();
         manzana = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        informativo = new javax.swing.JLabel();
         Logo = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        creacion = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(18, 90, 173));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Imprimir");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Imprime.setBackground(new java.awt.Color(18, 90, 173));
+        Imprime.setForeground(new java.awt.Color(255, 255, 255));
+        Imprime.setText("Imprimir");
+        Imprime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ImprimeActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 450, 90, 30));
+        add(Imprime, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 450, 90, 30));
 
         Imprimir.setBackground(new java.awt.Color(255, 255, 255));
         Imprimir.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -188,24 +192,32 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         manzana.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         Imprimir.add(manzana, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 350, 70, 20));
 
+        informativo.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        informativo.setForeground(new java.awt.Color(0, 0, 0));
+        informativo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Imprimir.add(informativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, 880, 30));
+        Imprimir.add(Logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 410, 140));
+
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Texto legal emitido por el ayuntamiento");
-        Imprimir.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, 880, -1));
-        Imprimir.add(Logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 410, 140));
+        jLabel6.setText("Fecha de creación:");
+        Imprimir.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 150, -1, -1));
+
+        creacion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        creacion.setForeground(new java.awt.Color(0, 0, 0));
+        Imprimir.add(creacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 150, 150, 20));
 
         add(Imprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 440));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ImprimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImprimeActionPerformed
         new Thread() {
             public void run() {
                 imprimir();
             }
         }.start();
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_ImprimeActionPerformed
     public void imprimir() {
         try {
             PrinterJob g = PrinterJob.getPrinterJob();
@@ -220,15 +232,21 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
             JOptionPane.showMessageDialog(this, "Error al imprimir", "Impresion", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+    
+    private void fecha_contrato(){
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Fecha;
+    private javax.swing.JButton Imprime;
     private javax.swing.JPanel Imprimir;
     private javax.swing.JLabel Logo;
+    private javax.swing.JLabel creacion;
     private javax.swing.JLabel direccion;
     private javax.swing.JLabel folio_contrato;
     private javax.swing.JLabel folio_cte;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel informativo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

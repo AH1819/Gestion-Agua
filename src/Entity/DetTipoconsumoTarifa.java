@@ -1,10 +1,27 @@
 package Entity;
 
-public class DetTipoconsumoTarifa{
+public class DetTipoconsumoTarifa {
 
     private Integer consec;
     private Integer id_consumo;
+    private String tipo_consumo;
     private Double tarifa;
+
+    public DetTipoconsumoTarifa() {
+    }
+
+    public DetTipoconsumoTarifa(Integer consec, Integer id_consumo, Double tarifa) {
+        this.consec = consec;
+        this.id_consumo = id_consumo;
+        this.tarifa = tarifa;
+    }
+
+    public DetTipoconsumoTarifa(Integer consec, Integer id_consumo, String tipo_consumo, Double tarifa) {
+        this.consec = consec;
+        this.id_consumo = id_consumo;
+        this.tipo_consumo = tipo_consumo;
+        this.tarifa = tarifa;
+    }
 
     public Integer getConsec() {
         return consec;
@@ -30,12 +47,12 @@ public class DetTipoconsumoTarifa{
         this.tarifa = tarifa;
     }
 
-    public DetTipoconsumoTarifa(Integer consec, Double tarifa) {
-        this.consec = consec;
-        this.tarifa = tarifa;
+    public String getTipo_consumo() {
+        return tipo_consumo;
     }
 
-    public DetTipoconsumoTarifa() {
+    public void setTipo_consumo(String tipo_consumo) {
+        this.tipo_consumo = tipo_consumo;
     }
-    
+
 }

@@ -1,5 +1,7 @@
 package Entity;
 
+import java.sql.Date;
+
 public class Contrato_generado {
 
     private static Integer folio_contrato = null;
@@ -8,6 +10,24 @@ public class Contrato_generado {
     private static String direccion = null;
     private static String manzana = null;
     private static String lote = null;
+    private static String informativo = null;
+    private static Date creacion_contrato;
+
+    public Date getCreacion_contrato() {
+        return creacion_contrato;
+    }
+
+    public void setCreacion_contrato(Date aCreacion_contrato) {
+        creacion_contrato = aCreacion_contrato;
+    }
+    
+    public String getInformativo() {
+        return informativo;
+    }
+
+    public void setInformativo(String Informativo) {
+        informativo = Informativo;
+    }
 
     public Integer getFolio_contrato() {
         return folio_contrato;

@@ -3,7 +3,9 @@ package Vista;
 import Entity.Contrato;
 import Entity.Contrato_generado;
 import Entity.ErrorsAndSuccesses;
+import Entity.Informativo;
 import Servicio.ContratoServicio;
+import Servicio.InformativoServicio;
 import static Vista.Interfaz2.content;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -327,9 +329,23 @@ public class Contrato_v extends javax.swing.JPanel {
             jScrollPane2.setVisible(false);
             Cargando.setVisible(true);
             GetContratos();
+            Informativo();
             Cargando.setVisible(false);
             Mostrar.setVisible(true);
             jScrollPane2.setVisible(true);
+        }
+    }
+    
+    String informativos;
+    
+    private void Informativo() {
+        InformativoServicio info = new InformativoServicio();
+        List<Informativo> listas = info.MostrarInformacion();
+        int tam = listas.size();
+        //informativos = new String[tam][1];
+        for (int i = 0; i < tam; i++) {
+            //informativo.setText(in.getInformativo());
+            informativos = listas.get(i).getInformativo();
         }
     }
 
@@ -343,9 +359,11 @@ public class Contrato_v extends javax.swing.JPanel {
                 cg.setFolio_contrato(lista.get(i).getFolioContrato());
                 cg.setFolio_cliente(lista.get(i).getFolio_cte());
                 cg.setNombre_cliente(lista.get(i).getNombre());
+                cg.setCreacion_contrato(lista.get(i).getCreacion_contrato());
                 cg.setDireccion(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", " + lista.get(i).getNombreCalle());
                 cg.setManzana(lista.get(i).getNumeroMzn().toString());
                 cg.setLote(lista.get(i).getNumeroLt().toString());
+                cg.setInformativo(informativos);
             }
             Generar_contrato gc = new Generar_contrato("null");
             gc.setSize(1030, 479);

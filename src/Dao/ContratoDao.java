@@ -2,6 +2,7 @@ package Dao;
 
 import Conexion.Conexion;
 import Entity.Contrato;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -291,7 +292,7 @@ public class ContratoDao {
         List<Contrato> SCT = new ArrayList<>();
 
         String sql = "select cliente.folio_cte,cliente.nombre,cliente.apellido_p,cliente.apellido_m,contrato.folio_contrato,contrato.municipio,contrato.residencia,"
-                + "contrato.nombre_calle,contrato.numero_mzn,contrato.numero_lt "
+                + "contrato.nombre_calle,contrato.numero_mzn,contrato.numero_lt,contrato.fecha_creacion "
                 + "from contrato "
                 + "inner join cliente "
                 + "on cliente.folio_cte = contrato.folio_cte "
@@ -312,6 +313,7 @@ public class ContratoDao {
                 ct.setNombreCalle(Resultado.getString("nombre_calle"));
                 ct.setNumeroMzn(Resultado.getInt("numero_mzn"));
                 ct.setNumeroLt(Resultado.getInt("numero_lt"));
+                ct.setCreacion_contrato(Resultado.getDate("fecha_creacion"));
                 ct.setNombre(Resultado.getString("nombre") + " " + Resultado.getString("apellido_p") + " " + Resultado.getString("apellido_m"));
                 SCT.add(ct);
 

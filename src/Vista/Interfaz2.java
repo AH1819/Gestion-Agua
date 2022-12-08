@@ -18,6 +18,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     Principal p1 = new Principal();
     ErrorsAndSuccesses es = new ErrorsAndSuccesses();
     public static EventBus eventos = new EventBus();
+    public static EventBus contratos = new EventBus();
     Logeo p0 = new Logeo();
     int cerrar;
     String ventana;
@@ -101,14 +102,15 @@ public class Interfaz2 extends javax.swing.JFrame {
         Admin = new javax.swing.JPanel();
         Admin_l = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        Title = new javax.swing.JPanel();
+        exit = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         content = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         fecha = new javax.swing.JLabel();
         Ayuntamiento = new javax.swing.JLabel();
-        Title = new javax.swing.JPanel();
-        red_squr = new javax.swing.JPanel();
-        exit = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -325,7 +327,59 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         Menu.add(espacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 260, 200));
 
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        Menu.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 30));
+
         Background.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 640));
+
+        Title.setBackground(new java.awt.Color(255, 255, 255));
+        Title.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        Title.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                TitleMouseDragged(evt);
+            }
+        });
+        Title.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TitleMousePressed(evt);
+            }
+        });
+        Title.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        exit.setBackground(new java.awt.Color(255, 255, 255));
+        exit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        exit.setForeground(new java.awt.Color(0, 0, 0));
+        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exit.setText("X");
+        exit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        exit.setOpaque(true);
+        exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                exitMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                exitMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                exitMousePressed(evt);
+            }
+        });
+        Title.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 0, 60, 30));
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8-menos-30.png"))); // NOI18N
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        Title.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 0, 60, 30));
+
+        Background.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 30));
 
         content.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -363,68 +417,6 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         Background.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 1030, 110));
 
-        Title.setBackground(new java.awt.Color(255, 255, 255));
-        Title.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                TitleMouseDragged(evt);
-            }
-        });
-        Title.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                TitleMousePressed(evt);
-            }
-        });
-
-        red_squr.setBackground(new java.awt.Color(255, 255, 255));
-        red_squr.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        red_squr.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                red_squrMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                red_squrMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                red_squrMousePressed(evt);
-            }
-        });
-        red_squr.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        exit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        exit.setForeground(new java.awt.Color(102, 102, 102));
-        exit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        exit.setText("X");
-        exit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        exit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                exitMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                exitMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                exitMousePressed(evt);
-            }
-        });
-        red_squr.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 30));
-
-        javax.swing.GroupLayout TitleLayout = new javax.swing.GroupLayout(Title);
-        Title.setLayout(TitleLayout);
-        TitleLayout.setHorizontalGroup(
-            TitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TitleLayout.createSequentialGroup()
-                .addGap(0, 1230, Short.MAX_VALUE)
-                .addComponent(red_squr, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        TitleLayout.setVerticalGroup(
-            TitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(TitleLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(red_squr, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        Background.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 30));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -461,7 +453,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_clientes);
         resetColor(Admin);
         resetColor(Aboutus);
-        p1.setSize(1030, 479);
+        p1.setSize(1030, 500);
         p1.setLocation(0, 0);
 
         content.removeAll();
@@ -568,7 +560,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_prin);
 
         Administrador p1 = new Administrador();
-        p1.setSize(1030, 479);
+        p1.setSize(1030, 500);
         p1.setLocation(0, 0);
 
         content.removeAll();
@@ -605,36 +597,18 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_Login_exitMousePressed
 
     private void exitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseEntered
-        red_squr.setBackground(new Color(204, 0, 0));
+    exit.setBackground(new Color(204, 0, 0));
         exit.setForeground(Color.white);
     }//GEN-LAST:event_exitMouseEntered
 
     private void exitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseExited
-        red_squr.setBackground(new Color(255, 255, 255));
-        exit.setForeground(new Color(102, 102, 102));
+        exit.setBackground(new Color(255, 255, 255));
+        exit.setForeground(new Color(0, 0, 0));
     }//GEN-LAST:event_exitMouseExited
 
     private void exitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMousePressed
-        /*Login p1 = new Login();
-        this.dispose();
-        p1.setVisible(true);*/
-        System.exit(0);
+               System.exit(0);
     }//GEN-LAST:event_exitMousePressed
-
-    private void red_squrMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_red_squrMouseEntered
-        red_squr.setBackground(new Color(204, 0, 0));
-        exit.setForeground(Color.white);
-    }//GEN-LAST:event_red_squrMouseEntered
-
-    private void red_squrMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_red_squrMouseExited
-        red_squr.setBackground(new Color(255, 255, 255));
-        exit.setForeground(new Color(102, 102, 102));
-    }//GEN-LAST:event_red_squrMouseExited
-
-    private void red_squrMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_red_squrMousePressed
-        //Login p1 = new Login();
-        System.exit(0);
-    }//GEN-LAST:event_red_squrMousePressed
 
     private void TitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TitleMouseDragged
         int x = evt.getXOnScreen();
@@ -691,6 +665,10 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void espacioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_espacioMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_espacioMousePressed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        this.setExtendedState(ICONIFIED);
+    }//GEN-LAST:event_jLabel2MouseClicked
     void setColor(JPanel panel) {
         panel.setBackground(new Color(21, 101, 192));
     }
@@ -861,12 +839,13 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JPanel red_squr;
     // End of variables declaration//GEN-END:variables
 }

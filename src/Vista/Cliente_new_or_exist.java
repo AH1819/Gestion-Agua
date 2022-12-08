@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class Cliente_new_or_exist extends javax.swing.JDialog {
 
@@ -17,6 +19,7 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
         Elegir.setEnabled(false);
         this.setLocationRelativeTo(null);
         new Thread() {
+            @Override
             public void run() {
                 Scroll.setVisible(false);
                 Mostrar.setVisible(false);
@@ -31,15 +34,13 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
             @Override
             public void mousePressed(MouseEvent evt) {
                 JTable table = (JTable) evt.getSource();
-                Point point = evt.getPoint();
-                int row = Mostrar.rowAtPoint(point);
 
                 if (evt.getClickCount() == 1) {
                     try {
                         Folio.setText(Mostrar.getValueAt(Mostrar.getSelectedRow(), 0).toString());
                         Vali();
                     } catch (Exception e) {
-
+                        evt.consume();
                     }
                 }
             }
@@ -192,6 +193,10 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
             }
         });
         if (Mostrar.getColumnModel().getColumnCount() > 0) {
+            DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+                tcr.setHorizontalAlignment(SwingConstants.CENTER);
+                ((DefaultTableCellRenderer) Mostrar.getTableHeader().getDefaultRenderer())
+                        .setHorizontalAlignment(SwingConstants.CENTER);
             Mostrar.getColumnModel().getColumn(0).setPreferredWidth(10);
             Mostrar.getColumnModel().getColumn(1).setPreferredWidth(200);
             Mostrar.getColumnModel().getColumn(6).setPreferredWidth(10);

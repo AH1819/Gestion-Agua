@@ -7,9 +7,11 @@ import Entity.Contrato;
 import Entity.Contrato_generado;
 import Entity.DetTipoconsumoTarifa;
 import Entity.ErrorsAndSuccesses;
+import Entity.Informativo;
 import Servicio.CatalogosServicio;
 import Servicio.ClienteServicio;
 import Servicio.ContratoServicio;
+import Servicio.InformativoServicio;
 import Servicio.TarifaServicio;
 import static Vista.Interfaz2.content;
 import java.awt.BorderLayout;
@@ -29,7 +31,7 @@ public class Contrato_regis extends javax.swing.JPanel {
     int folio;
     int folio_ct;
     String ubicacion;
-    int idconsumo;
+    int idconsumo = 0;
     int idperiodo;
     String opcion;
     String menu;
@@ -61,9 +63,9 @@ public class Contrato_regis extends javax.swing.JPanel {
         Cargando.setVisible(false);
         GetConsumo();
         GetPeriodo();
-        Folio.setText(String.valueOf(folio));
         this.ubicacion = ubicacion;
         this.folio = folio;
+        Folio.setText(String.valueOf(folio));
         nombre(folio);
     }
 
@@ -79,6 +81,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         this.ubicacion = ubicacion;
         this.folio_ct = folio;
         this.edit = edit;
+        Folio.setText(String.valueOf(folio));
         Obtener(folio);
         Contrato.setText("Modificar datos del contrato");
         Registrar.setText("Guardar");
@@ -518,7 +521,13 @@ public class Contrato_regis extends javax.swing.JPanel {
     }//GEN-LAST:event_ConsumoMouseClicked
 
     private void ConsumoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ConsumoItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
+
+        if (evt.getStateChange() == ItemEvent.SELECTED && Consumo.getSelectedIndex() > 0) {
+            for (String[] Cons : Consumos) {
+                if (Cons[1].equals(Consumo.getSelectedItem())) {
+                    idconsumo = Integer.parseInt(Cons[0]);
+                }
+            }
             new Tari().show();
         }
     }//GEN-LAST:event_ConsumoItemStateChanged
@@ -528,6 +537,24 @@ public class Contrato_regis extends javax.swing.JPanel {
 
         } else {
             observaciones = Observaciones.getText();
+        }
+
+        for (String[] Cons : Consumos) {
+            if (Cons[1].equals(Consumo.getSelectedItem())) {
+                idconsumo = Integer.parseInt(Cons[0]);
+            }
+        }
+
+        for (String[] Per : Periodos) {
+            if (Per[1].equals(Periodo.getSelectedItem())) {
+                idperiodo = Integer.parseInt(Per[0]);
+            }
+        }
+
+        for (String[] Tari : Tarifas) {
+            if (Tari[1].equals(Tarifa.getSelectedItem())) {
+                id = Integer.parseInt(Tari[0]);
+            }
         }
 
         if (Municipio.getText().equals(" Municipio") || Municipio.getText().isEmpty()) {
@@ -586,7 +613,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         if (ubicacion.equals("insert cliente")) {
             JOptionPane.showMessageDialog(this, "El contrato no puede ser cancelado", "Contrato", JOptionPane.INFORMATION_MESSAGE);
         }
-        if (ubicacion.equals("editar contrato")) {
+        if (ubicacion.equals("editar contrato")||ubicacion.equals("contrato")) {
             Contrato_v p1 = new Contrato_v();
             p1.setSize(1030, 500);
             p1.setLocation(0, 0);
@@ -596,7 +623,7 @@ public class Contrato_regis extends javax.swing.JPanel {
             content.revalidate();
             content.repaint();
         }
-        if (ubicacion.equals("cliente contrato")) {
+        if (ubicacion.equals("Registrar contrato")) {
             Clientes p1 = new Clientes();
             p1.setSize(1030, 500);
             p1.setLocation(0, 0);
@@ -685,8 +712,8 @@ public class Contrato_regis extends javax.swing.JPanel {
 
         @Override
         public void run() {
-            GetIdconsumo();
             GetTarifa(idconsumo);
+            System.out.println(idconsumo);
         }
     }
 
@@ -694,9 +721,11 @@ public class Contrato_regis extends javax.swing.JPanel {
 
         public void show() {
             new Thread(this).start();
+            
         }
 
         public void run() {
+            Informativo();
             Cargando.setVisible(true);
             if (Registrar.getText().equals("Registrar")) {
                 InsertarContrato(folio);
@@ -707,49 +736,58 @@ public class Contrato_regis extends javax.swing.JPanel {
             }
         }
     }
+    String informativos;
+    
+    private void Informativo() {
+        InformativoServicio info = new InformativoServicio();
+        List<Informativo> listas = info.MostrarInformacion();
+        int tam = listas.size();
+        //informativos = new String[tam][1];
+        for (int i = 0; i < tam; i++) {
+            //informativo.setText(in.getInformativo());
+            informativos = listas.get(i).getInformativo();
+        }
+    }
+    String[][] Consumos;
 
     private void GetConsumo() {
 
         CatalogosServicio cs = new CatalogosServicio();
         List<Cat_Consumo> lista = cs.GetConsumo();
         int tam = lista.size();
-
+        Consumos = new String[tam][2];
         for (int i = 0; i < tam; i++) {
+            Consumos[i][0] = lista.get(i).getId_consumo().toString();
+            Consumos[i][1] = lista.get(i).getTipo_consumo();
             Consumo.addItem(lista.get(i).getTipo_consumo());
         }
     }
 
-    private void GetIdconsumo() {
-        CatalogosServicio cs = new CatalogosServicio();
-        idconsumo = cs.GetIdconsumo(Consumo.getSelectedItem().toString());
-    }
+    String[][] Periodos;
 
     private void GetPeriodo() {
-
         CatalogosServicio cs = new CatalogosServicio();
         List<Cat_periodo> lista = cs.GetPeriodo();
         int tam = lista.size();
-
+        Periodos = new String[tam][2];
         for (int i = 0; i < tam; i++) {
+            Periodos[i][0] = lista.get(i).getId_periodo().toString();
+            Periodos[i][1] = lista.get(i).getTipo_periodo();
             Periodo.addItem(lista.get(i).getTipo_periodo());
         }
     }
 
-    private void GetIdperiodo() {
-        CatalogosServicio cs = new CatalogosServicio();
-        idperiodo = cs.GetIdperiodo(Periodo.getSelectedItem().toString());
-    }
-
     public void InsertarContrato(int folio) {
-        GetIdperiodo();
-        GetTarifaid();
+
         ContratoServicio cs = new ContratoServicio();
         String status = "activo";
 
         Contrato_generado cg = new Contrato_generado();
-        cg.setDireccion(Municipio.getText() + "," + Residencia.getText() + "," + Nombre_calle.getText());
+        cg.setDireccion(Municipio.getText() + ", " + Residencia.getText() + ", " + Nombre_calle.getText());
         cg.setManzana(Manzana.getText());
         cg.setLote(Lote.getText());
+        cg.setInformativo(informativos);
+        
         es.setResultinsert(cs.InsertarContrato(Municipio.getText(), Residencia.getText(), Nombre_calle.getText(), Referencia.getText(), observaciones, Integer.parseInt(Manzana.getText()), Integer.parseInt(Lote.getText()), id, idconsumo, idperiodo, folio, status));
         if (es.getResultinsert() == -1) {
             JOptionPane.showMessageDialog(null, "Hubo un error", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -790,23 +828,20 @@ public class Contrato_regis extends javax.swing.JPanel {
         }
     }
 
+    String[][] Tarifas;
+
     private void GetTarifa(int id) {
         TarifaServicio ts = new TarifaServicio();
         List<DetTipoconsumoTarifa> lista = ts.Tarifas(id);
-
         int tam = lista.size();
         Tarifa.removeAllItems();
         Tarifa.addItem("Selecciona una opción");
+        Tarifas = new String[tam][2];
         for (int i = 0; i < tam; i++) {
-
+            Tarifas[i][0] = lista.get(i).getConsec().toString();
+            Tarifas[i][1] = lista.get(i).getTarifa().toString();
             Tarifa.addItem(lista.get(i).getTarifa().toString());
-
         }
-    }
-
-    private void GetTarifaid() {
-        TarifaServicio ts = new TarifaServicio();
-        id = ts.Tarifaid(idconsumo, Double.parseDouble(Tarifa.getSelectedItem().toString()));
     }
 
     private void Obtener(int folio) {

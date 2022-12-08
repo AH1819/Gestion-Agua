@@ -31,7 +31,18 @@ public class CatalogosServicio {
     public List<Cat_pago> Tipo_pago() {
         return this.cd.Tipo_pago();
     }
-    public List<Cat_pago> Tipo_pagos() {
-        return this.cd.Tipo_pagos();
+    
+    public boolean Insertar_Consumo(String tipo){
+        boolean status = this.cd.Insertar_Consumo(tipo);
+        return status;
     }
+    
+    public boolean Insertar_Periodo(String tipo,int meses){
+        boolean status = this.cd.Insertar_Periodo(tipo,meses);
+        return status;
+    }
+    /*public boolean Existencia_Consumo(String tipo){
+        boolean status = cd.Existencia_Consumo(tipo);
+        return status;
+    }*/
 }

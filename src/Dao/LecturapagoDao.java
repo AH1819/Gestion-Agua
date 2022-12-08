@@ -189,5 +189,35 @@ public class LecturapagoDao {
         }
         return ret;
     }
+    
+    public int InsertarLecturapagoFijo(float lecturapago,int folio,int mes, boolean fijo) {
+        int ret = 0;
+        String sql = "insert into lectura_pago(importe,folio_contrato,id_m, costo_fijo)values(?,?,?,?)";
+        System.out.println("insercción "+lecturapago +"  "+ "  " +folio+"  "+ mes+ "  "+fijo);
+        PreparedStatement comando = null;
+
+        try {
+            comando = conexion.conectar().prepareStatement(sql);
+            comando.setFloat(1, lecturapago);
+            comando.setInt(2, folio);
+            comando.setInt(3, mes);
+            comando.setBoolean(4, fijo);
+            
+
+            comando.executeUpdate();
+
+            System.out.println("sentencia "+comando); 
+            
+            conexion.conectar().close();
+            comando.close();
+            ret = 1;
+        } catch (SQLException e) {
+            Logger.getLogger(ContratoDao.class.getName()).log(Level.SEVERE, null, e);
+            ret = -1;
+        }
+        return ret;
+    }
+    
+    
 
 }

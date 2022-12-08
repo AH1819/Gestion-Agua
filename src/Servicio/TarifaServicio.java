@@ -12,10 +12,11 @@ public class TarifaServicio {
         return this.td.Tarifas(id);
     }
 
-    public int Tarifaid(int consumo, double tarifa) {
-
-        int ret = this.td.idtarifa(consumo, tarifa);
-
-        return ret;
+    public List<DetTipoconsumoTarifa> Mostrar_Tarifas() {
+        return this.td.Mostrar_Tarifas();
+    }
+    public boolean Insertar_Tarifa(int consec,int id_c, double tarifa){
+        boolean status = this.td.Insertar_Tarifa(consec,id_c,tarifa);
+        return status;
     }
 }

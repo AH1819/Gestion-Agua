@@ -11,6 +11,7 @@ import Servicio.ClienteServicio;
 import Servicio.DescuentoServicio;
 import Servicio.LecturaPagoServicio;
 import Servicio.TicketServicio;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,7 +23,7 @@ import java.awt.print.PrinterJob;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.swing.ImageIcon;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -34,6 +35,9 @@ public class Pago extends javax.swing.JPanel {
     String referencias;
     int id_desc = 0;
     int id_tipo = 0;
+    Double Pagado = 0.0;
+    Double Recibido = 0.0;
+    DefaultListModel model = new DefaultListModel();
 
     public Pago() {
         initComponents();
@@ -55,22 +59,16 @@ public class Pago extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel3 = new javax.swing.JLabel();
+        Nombre = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         Dato = new javax.swing.JTextField();
         Pago = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        Residencia = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         Celular = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        Municipio = new javax.swing.JTextField();
+        Domicilio = new javax.swing.JTextField();
         N_cte = new javax.swing.JTextField();
-        Lote = new javax.swing.JTextField();
-        Manzana = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         T_pago = new javax.swing.JComboBox<>();
         Importe = new javax.swing.JTextField();
@@ -85,11 +83,18 @@ public class Pago extends javax.swing.JPanel {
         D_pago = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
         Generando = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Meses_adeudo = new javax.swing.JTextArea();
         Mes_adeudo1 = new javax.swing.JLabel();
         referencia = new javax.swing.JTextField();
         Referencia = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Adeudos_mes = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Adeudo_deuda = new javax.swing.JList<>();
+        Cambio = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        recibido = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -101,19 +106,18 @@ public class Pago extends javax.swing.JPanel {
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 30));
         add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 1030, 10));
 
-        jLabel3.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Nombre:");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 70, -1));
+        Nombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        Nombre.setForeground(new java.awt.Color(0, 0, 0));
+        Nombre.setText("Nombre:");
+        add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 70, -1));
 
-        jLabel6.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Pago:");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 290, 70, 20));
+        jLabel6.setText("Cantidad a pagar:");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 120, 20));
 
         Dato.setBackground(new java.awt.Color(255, 255, 255));
         Dato.setForeground(new java.awt.Color(0, 0, 0));
-        Dato.setText(" Ingrese el dato");
         Dato.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 DatoFocusGained(evt);
@@ -142,6 +146,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(Dato, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 140, 40));
 
+        Pago.setEditable(false);
         Pago.setBackground(new java.awt.Color(255, 255, 255));
         Pago.setForeground(new java.awt.Color(0, 0, 0));
         Pago.setText(" Cantidad a pagar");
@@ -158,19 +163,17 @@ public class Pago extends javax.swing.JPanel {
                 PagoMousePressed(evt);
             }
         });
-        add(Pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 190, 40));
+        Pago.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                PagoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PagoKeyTyped(evt);
+            }
+        });
+        add(Pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 180, 40));
 
-        jLabel7.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Residencia:");
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 70, -1));
-
-        Residencia.setEditable(false);
-        Residencia.setBackground(new java.awt.Color(255, 255, 255));
-        Residencia.setForeground(new java.awt.Color(0, 0, 0));
-        add(Residencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 190, 40));
-
-        jLabel8.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Celular:");
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, -1, -1));
@@ -180,20 +183,20 @@ public class Pago extends javax.swing.JPanel {
         Celular.setForeground(new java.awt.Color(0, 0, 0));
         add(Celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 150, 230, 40));
 
-        jLabel9.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Deuda total:");
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 210, 100, -1));
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 210, 100, -1));
 
-        jLabel10.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Municipio:");
+        jLabel10.setText("Domicilio:");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 70, -1));
 
-        Municipio.setEditable(false);
-        Municipio.setBackground(new java.awt.Color(255, 255, 255));
-        Municipio.setForeground(new java.awt.Color(0, 0, 0));
-        add(Municipio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 210, 40));
+        Domicilio.setEditable(false);
+        Domicilio.setBackground(new java.awt.Color(255, 255, 255));
+        Domicilio.setForeground(new java.awt.Color(0, 0, 0));
+        add(Domicilio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 430, 40));
 
         N_cte.setEditable(false);
         N_cte.setBackground(new java.awt.Color(255, 255, 255));
@@ -205,32 +208,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(N_cte, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 430, 40));
 
-        Lote.setEditable(false);
-        Lote.setBackground(new java.awt.Color(255, 255, 255));
-        Lote.setForeground(new java.awt.Color(0, 0, 0));
-        add(Lote, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 230, 100, 40));
-
-        Manzana.setEditable(false);
-        Manzana.setBackground(new java.awt.Color(255, 255, 255));
-        Manzana.setForeground(new java.awt.Color(0, 0, 0));
-        Manzana.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ManzanaActionPerformed(evt);
-            }
-        });
-        add(Manzana, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 230, 90, 40));
-
-        jLabel13.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setText("Lote:");
-        add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 210, -1, -1));
-
-        jLabel14.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel14.setText("Manzana:");
-        add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 210, -1, -1));
-
-        jLabel15.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Tipo de pago:");
         add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 290, -1, -1));
@@ -248,13 +226,13 @@ public class Pago extends javax.swing.JPanel {
         Importe.setEditable(false);
         Importe.setBackground(new java.awt.Color(255, 255, 255));
         Importe.setForeground(new java.awt.Color(0, 0, 0));
-        Importe.setText(" Importe a pagar");
+        Importe.setText(" Importe acumulado");
         Importe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ImporteActionPerformed(evt);
             }
         });
-        add(Importe, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, 190, 40));
+        add(Importe, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 230, 190, 40));
 
         Busqueda.setBackground(new java.awt.Color(255, 255, 255));
         Busqueda.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
@@ -323,7 +301,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(Contrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 150, 190, 40));
 
-        contrato.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        contrato.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         contrato.setForeground(new java.awt.Color(0, 0, 0));
         contrato.setText("Folio del Contrato");
         add(contrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 130, -1, -1));
@@ -336,12 +314,12 @@ public class Pago extends javax.swing.JPanel {
         Mes_pagar.setBackground(new java.awt.Color(255, 255, 255));
         Mes_pagar.setForeground(new java.awt.Color(0, 0, 0));
         Mes_pagar.setText(" Mes atrasado");
-        add(Mes_pagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 210, 40));
+        add(Mes_pagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, 190, 40));
 
-        Mes_adeudo.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        Mes_adeudo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         Mes_adeudo.setForeground(new java.awt.Color(0, 0, 0));
         Mes_adeudo.setText("Mes a pagar:");
-        add(Mes_adeudo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 90, 20));
+        add(Mes_adeudo, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 210, 90, 20));
 
         D_pago.setBackground(new java.awt.Color(255, 255, 255));
         D_pago.setForeground(new java.awt.Color(0, 0, 0));
@@ -353,7 +331,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(D_pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 230, 40));
 
-        jLabel16.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Descuento:");
         add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 290, 120, -1));
@@ -362,14 +340,7 @@ public class Pago extends javax.swing.JPanel {
         Generando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando (1).gif"))); // NOI18N
         add(Generando, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 400, 60, 60));
 
-        Meses_adeudo.setEditable(false);
-        Meses_adeudo.setColumns(20);
-        Meses_adeudo.setRows(5);
-        jScrollPane1.setViewportView(Meses_adeudo);
-
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 210, 100));
-
-        Mes_adeudo1.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        Mes_adeudo1.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         Mes_adeudo1.setForeground(new java.awt.Color(0, 0, 0));
         Mes_adeudo1.setText("Meses con cargo:");
         add(Mes_adeudo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 120, 20));
@@ -378,19 +349,62 @@ public class Pago extends javax.swing.JPanel {
         referencia.setForeground(new java.awt.Color(0, 0, 0));
         add(referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 390, 230, 40));
 
-        Referencia.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        Referencia.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         Referencia.setForeground(new java.awt.Color(0, 0, 0));
         Referencia.setText("Folio de ticket:");
         add(Referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 370, 90, -1));
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Dato a buscar:");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, -1, -1));
+
+        Adeudos_mes.setBackground(new java.awt.Color(255, 255, 255));
+        Adeudos_mes.setForeground(new java.awt.Color(0, 0, 0));
+        jScrollPane2.setViewportView(Adeudos_mes);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 110, 100));
+
+        Adeudo_deuda.setBackground(new java.awt.Color(255, 255, 255));
+        Adeudo_deuda.setForeground(new java.awt.Color(0, 0, 0));
+        jScrollPane3.setViewportView(Adeudo_deuda);
+
+        add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 80, 100));
+
+        Cambio.setEditable(false);
+        Cambio.setBackground(new java.awt.Color(255, 255, 255));
+        Cambio.setForeground(new java.awt.Color(0, 0, 0));
+        Cambio.setText("$0");
+        add(Cambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 80, 40));
+
+        jLabel3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Cambio:");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 290, -1, 20));
+
+        recibido.setEditable(false);
+        recibido.setBackground(new java.awt.Color(255, 255, 255));
+        recibido.setForeground(new java.awt.Color(0, 0, 0));
+        recibido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                recibidoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                recibidoKeyTyped(evt);
+            }
+        });
+        add(recibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 130, 40));
+
+        jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Cantidad recibida:");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, -1, 20));
     }// </editor-fold>//GEN-END:initComponents
 
     private void N_cteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_N_cteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_N_cteActionPerformed
-
-    private void ManzanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ManzanaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ManzanaActionPerformed
 
     private void DatoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DatoMouseReleased
         // TODO add your handling code here:
@@ -413,6 +427,9 @@ public class Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_BusquedaActionPerformed
 
     private void PagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PagarActionPerformed
+        contrato_id = Integer.parseInt(Dato.getText());
+        Pagado = Double.parseDouble(Pago.getText());
+        Recibido = Double.parseDouble(recibido.getText());
         if (D_pago.getSelectedIndex() == 0) {
             porcentaje = "0";
         } else {
@@ -423,84 +440,69 @@ public class Pago extends javax.swing.JPanel {
                 }
             }
         }
-
-        if (Importe.getText().equals(" Importe a pagar") || Importe.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un contrato para realizar el pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            Dato.requestFocus();
+        if (Pago.getText().equals(" Cantidad a pagar") || Pago.getText().isEmpty()) {
+            MensajeError("Campo vacio: Pago", Pago);
         } else {
-            if (Pago.getText().equals(" Cantidad a pagar") || Pago.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Campo vacio: Pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                Pago.requestFocus();
+            if (T_pago.getSelectedItem().equals("Seleccione una opción")) {
+                MensajeError("Campo vacio: Tipo de Pago", T_pago);
             } else {
-                if (T_pago.getSelectedItem().equals("Seleccione una opción")) {
-                    JOptionPane.showMessageDialog(null, "Campo vacio: Tipo de Pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                    T_pago.requestFocus();
-                } else {
-                    for (String[] Tipo : Tipo_pago) {
-                        if (Tipo[1].equals(T_pago.getSelectedItem())) {
-                            id_tipo = Integer.parseInt(Tipo[0]);
-                            System.out.println(id_tipo);
-                        }
+                for (String[] Tipo : Tipo_pago) {
+                    if (Tipo[1].equals(T_pago.getSelectedItem())) {
+                        id_tipo = Integer.parseInt(Tipo[0]);
                     }
-                    new Thread() {
-                        public void run() {
-                            Dato.setEditable(false);
-                            Busqueda.setEnabled(false);
-                            Buscar.setEnabled(false);
-                            Pago.setEditable(false);
-                            D_pago.setEnabled(false);
-                            T_pago.setEnabled(false);
-                            Generando.setVisible(true);
-                            InsertarPago();
-                        }
-                    }.start();
                 }
+                new Thread() {
+                    public void run() {
+                        Dato.setEditable(false);
+                        Busqueda.setEnabled(false);
+                        Buscar.setEnabled(false);
+                        Pago.setEditable(false);
+                        Pagar.setEnabled(false);
+                        D_pago.setEnabled(false);
+                        T_pago.setEnabled(false);
+                        Generando.setVisible(true);
+                        InsertarPago();
+                    }
+                }.start();
             }
         }
     }//GEN-LAST:event_PagarActionPerformed
 
     private void BusquedaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BusquedaMousePressed
-        if (Dato.getText().isEmpty()) {
-            Dato.setText(" Ingrese el dato");
-        }
+
     }//GEN-LAST:event_BusquedaMousePressed
-int contrato_id = 0;
+    int contrato_id = 0;
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
-        contrato_id = Integer.parseInt(Dato.getText());
+
         if (!N_cte.getText().isEmpty()) {
             N_cte.setText("");
             Contrato.setText("");
             Celular.setText("");
-            Municipio.setText("");
-            Residencia.setText("");
-            Manzana.setText("");
-            Lote.setText("");
+            Domicilio.setText("");
             Importe.setText(" Importe a pagar");
             Mes_pagar.setText("");
             Pago.setText(" Cantidad a pagar");
             T_pago.setSelectedIndex(0);
             D_pago.setSelectedIndex(0);
-            Meses_adeudo.setText("");
+            model.clear();
+            Adeudo_deuda.setModel(model);
+            Adeudos_mes.setModel(model);
         }
 
         if (Busqueda.getSelectedItem().equals("Folio contrato")) {
-
             contrato.setVisible(true);
             contrato.setText("Folio cliente");
-
         }
         if (Busqueda.getSelectedItem().equals("Folio cliente")) {
             contrato.setVisible(true);
-            contrato.setText("Folio contrato");
-
+            contrato.setText("Folio cliente");
         }
         if (Busqueda.getSelectedItem().equals("Telefono/celular")) {
             contrato.setVisible(true);
-            contrato.setText("Telefono/celular");
-
+            contrato.setText("Folio cliente:");
         }
-        if (Busqueda.getSelectedItem().equals("Selecciona una opción") || Dato.getText().equals(" Ingrese el dato") || Dato.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar y elegir el tipo de dato para la busqueda", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        if (Busqueda.getSelectedItem().equals("Selecciona una opción") || Dato.getText().isEmpty()) {
+            MensajeError("Debe ingresar y elegir el tipo de dato para la busqueda", Dato);
         } else {
             new Hilos().show();
         }
@@ -529,15 +531,11 @@ int contrato_id = 0;
     }//GEN-LAST:event_DatoKeyTyped
 
     private void DatoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusGained
-        if (Dato.getText().equals(" Ingrese el dato")) {
-            Dato.setText("");
-        }
+
     }//GEN-LAST:event_DatoFocusGained
 
     private void DatoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusLost
-        if (Dato.getText().isEmpty()) {
-            Dato.setText(" Ingrese el dato");
-        }
+
     }//GEN-LAST:event_DatoFocusLost
 
     private void PagoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PagoFocusGained
@@ -573,9 +571,7 @@ int contrato_id = 0;
         if (T_pago.getSelectedItem().equals("Ventanilla")) {
             Referencia.setVisible(true);
             referencia.setVisible(true);
-            jLabel3.setVisible(true);
         } else {
-            jLabel3.setVisible(false);
             Referencia.setVisible(false);
             referencia.setVisible(false);
             referencias = "No aplica";
@@ -583,6 +579,34 @@ int contrato_id = 0;
 
 
     }//GEN-LAST:event_T_pagoActionPerformed
+
+    private void PagoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PagoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+        boolean punto = key == 46;
+        if (!numeros && !punto) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_PagoKeyTyped
+
+    private void PagoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PagoKeyReleased
+        Cambio_p();
+    }//GEN-LAST:event_PagoKeyReleased
+
+    private void recibidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_recibidoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+        boolean punto = key == 46;
+        if (!numeros && !punto) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_recibidoKeyTyped
+
+    private void recibidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_recibidoKeyReleased
+        Cambio_p();
+    }//GEN-LAST:event_recibidoKeyReleased
     public class Hilos implements Runnable {
 
         public void show() {
@@ -609,14 +633,56 @@ int contrato_id = 0;
         }
     }
 
+    private void MensajeError(String campo_e, Component campo) {
+        JOptionPane.showMessageDialog(null, campo_e, " AVISO", JOptionPane.INFORMATION_MESSAGE);
+        campo.requestFocus();
+    }
+
+    private void Cambio_p() {
+        if (!Pago.getText().isEmpty() && !Pago.getText().equals(" Cantidad a pagar") && !recibido.getText().isEmpty()) {
+            double pagado_c = Double.parseDouble(recibido.getText().trim());
+            double pago = Double.parseDouble(Pago.getText().trim());
+            if (pago < pagado_c) {
+                double cambio = pagado_c - pago;
+                Cambio.setText("$" + String.valueOf(cambio));
+            } else {
+                Cambio.setText("$0");
+            }
+        } else {
+            Cambio.setText("$0");
+        }
+    }
+
+    private void Limpiar() {
+        recibido.setText("");
+        Dato.setText("");
+        N_cte.setText("");
+        Contrato.setText("");
+        Celular.setText("");
+        Domicilio.setText("");
+        Importe.setText(" Importe a pagar");
+        Pago.setText(" Cantidad a pagar");
+        model.clear();
+        Adeudo_deuda.setModel(model);
+        Adeudos_mes.setModel(model);
+        MensajeError("No se encontro ningun registro", Dato);
+    }
+
     private void Meses_deber(int id) {
         LecturaPagoServicio lp = new LecturaPagoServicio();
         List<LecturaPago> lista = lp.Meses_deuda(id);
         int tam = lista.size();
-        if (tam != 0) {
+
+        String AdeuM[] = new String[tam];
+        String AdeuD[] = new String[tam];
+        if (tam > 0) {
             for (int i = 0; i < tam; i++) {
-                Meses_adeudo.append(lista.get(i).getMes() + " " + lista.get(i).getAdeudo().toString() + "\n");
+                AdeuM[i] = lista.get(i).getMes() + ":";
+                AdeuD[i] = lista.get(i).getAdeudo().toString();
             }
+            Adeudos_mes.setListData(AdeuM);
+            Adeudo_deuda.setListData(AdeuD);
+            Adeudo_deuda.setSelectedIndex(0);
         } else {
             Mes_pagar.setText("No hay deudas");
         }
@@ -630,7 +696,8 @@ int contrato_id = 0;
         LecturaPagoServicio lp = new LecturaPagoServicio();
         List<LecturaPago> lista = lp.Mes_deuda(id);
         int tam = lista.size();
-        if (tam != 0) {
+
+        if (tam > 0) {
             for (int i = 0; i < tam; i++) {
                 mes = lista.get(i).getMes();
                 Mes_pagar.setText(lista.get(i).getMes() + ": $" + lista.get(i).getAdeudo());
@@ -641,7 +708,6 @@ int contrato_id = 0;
         } else {
             Mes_pagar.setText("No hay deuda");
         }
-
     }
 
     private void contrato(String num) {
@@ -654,26 +720,20 @@ int contrato_id = 0;
                 Contrato.setText(lista.get(i).getFolio().toString());
                 N_cte.setText(lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m());
                 Celular.setText(lista.get(i).getCelular());
-                Municipio.setText(lista.get(i).getMunicipio());
-                Residencia.setText(lista.get(i).getResidencia());
-                Manzana.setText(String.valueOf(lista.get(i).getNumeroMzn()));
-                Lote.setText(String.valueOf(lista.get(i).getNumeroLt()));
+                Domicilio.setText(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", m: " + String.valueOf(lista.get(i).getNumeroMzn()) + ", l: " + String.valueOf(lista.get(i).getNumeroLt()));
                 Importe.setText(String.valueOf(lista.get(i).getDeuda()));
                 consumo = lista.get(i).getConsumo();
+                if (Importe.getText().equals("0.0")) {
+                    Pagar.setEnabled(false);
+                } else {
+                    Pagar.setEnabled(true);
+                    Pago.setEditable(true);
+                    recibido.setEditable(true);
+                }
             }
             Cargando.setVisible(false);
         } else {
-            Dato.setText(" Ingrese el dato");
-            N_cte.setText("");
-            Contrato.setText("");
-            Celular.setText("");
-            Municipio.setText("");
-            Residencia.setText("");
-            Manzana.setText("");
-            Lote.setText("");
-            Importe.setText(" Importe a pagar");
-            Pago.setText(" Cantidad a pagar");
-            JOptionPane.showMessageDialog(this, "No se encontro ningun registro", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            Limpiar();
         }
     }
 
@@ -692,28 +752,23 @@ int contrato_id = 0;
 
             } else {
                 for (int i = 0; i < tam; i++) {
+                    Dato.setText(String.valueOf(lista.get(i).getFolio_c()));
                     Contrato.setText(lista.get(i).getFolio().toString());
                     N_cte.setText(lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m());
                     Celular.setText(lista.get(i).getCelular());
-                    Municipio.setText(lista.get(i).getMunicipio());
-                    Residencia.setText(lista.get(i).getResidencia());
-                    Manzana.setText(String.valueOf(lista.get(i).getNumeroMzn()));
-                    Lote.setText(String.valueOf(lista.get(i).getNumeroLt()));
+                    Domicilio.setText(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", m: " + String.valueOf(lista.get(i).getNumeroMzn()) + ", l: " + String.valueOf(lista.get(i).getNumeroLt()));
                     Importe.setText(String.valueOf(lista.get(i).getDeuda()));
+                    if (Importe.getText().equals("0.0")) {
+                        Pagar.setEnabled(false);
+                    } else {
+                        Pagar.setEnabled(true);
+                        Pago.setEditable(true);
+                        recibido.setEditable(true);
+                    }
                 }
             }
         } else {
-            Dato.setText(" Ingrese el dato");
-            N_cte.setText("");
-            Contrato.setText("");
-            Celular.setText("");
-            Municipio.setText("");
-            Residencia.setText("");
-            Manzana.setText("");
-            Lote.setText("");
-            Importe.setText(" Importe a pagar");
-            Pago.setText(" Cantidad a pagar");
-            JOptionPane.showMessageDialog(this, "No se encontro ningun registro", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            Limpiar();
         }
 
     }
@@ -732,14 +787,20 @@ int contrato_id = 0;
                 cc.setVisible(true);
             } else {
                 for (int i = 0; i < tam; i++) {
-                    Contrato.setText(lista.get(i).getCelular());
+                    Dato.setText(String.valueOf(lista.get(i).getFolioc()));
+                    Busqueda.setSelectedIndex(1);
+                    Contrato.setText(String.valueOf(lista.get(i).getFolio()));
+                    Celular.setText(lista.get(i).getCelular());
                     N_cte.setText(lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m());
-                    Celular.setText(lista.get(i).getTelefono());
-                    Municipio.setText(lista.get(i).getMunicipio());
-                    Residencia.setText(lista.get(i).getResidencia());
-                    Manzana.setText(String.valueOf(lista.get(i).getNumeroMzn()));
-                    Lote.setText(String.valueOf(lista.get(i).getNumeroLt()));
+                    Domicilio.setText(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", m: " + String.valueOf(lista.get(i).getNumeroMzn()) + ", l: " + String.valueOf(lista.get(i).getNumeroLt()));
                     Importe.setText(String.valueOf(lista.get(i).getDeuda()));
+                    if (Importe.getText().equals("0.0")) {
+                        Pagar.setEnabled(false);
+                    } else {
+                        Pagar.setEnabled(true);
+                        Pago.setEditable(true);
+                        recibido.setEditable(true);
+                    }
                 }
             }
         } else {
@@ -762,28 +823,24 @@ int contrato_id = 0;
                 cc.setVisible(true);
             } else {
                 for (int i = 0; i < tam; i++) {
-                    Contrato.setText(lista.get(i).getTelefono());
+                    Dato.setText(String.valueOf(lista.get(i).getFolioc()));
+                    Busqueda.setSelectedIndex(1);
+                    Contrato.setText(String.valueOf(lista.get(i).getFolio()));
                     N_cte.setText(lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m());
                     Celular.setText(lista.get(i).getCelular());
-                    Municipio.setText(lista.get(i).getMunicipio());
-                    Residencia.setText(lista.get(i).getResidencia());
-                    Manzana.setText(String.valueOf(lista.get(i).getNumeroMzn()));
-                    Lote.setText(String.valueOf(lista.get(i).getNumeroLt()));
+                    Domicilio.setText(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", m: " + String.valueOf(lista.get(i).getNumeroMzn()) + ", l: " + String.valueOf(lista.get(i).getNumeroLt()));
                     Importe.setText(String.valueOf(lista.get(i).getDeuda()));
+                    if (Importe.getText().equals("0.0")) {
+                        Pagar.setEnabled(false);
+                    } else {
+                        Pagar.setEnabled(true);
+                        Pago.setEditable(true);
+                        recibido.setEditable(true);
+                    }
                 }
             }
         } else {
-            Dato.setText(" Ingrese el dato");
-            N_cte.setText("");
-            Contrato.setText("");
-            Celular.setText("");
-            Municipio.setText("");
-            Residencia.setText("");
-            Manzana.setText("");
-            Lote.setText("");
-            Importe.setText(" Importe a pagar");
-            Pago.setText(" Cantidad a pagar");
-            JOptionPane.showMessageDialog(this, "No se encontro ningun registro", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            Limpiar();
         }
 
     }
@@ -824,46 +881,47 @@ int contrato_id = 0;
             referencias = referencia.getText();
         }
         AbonoService as = new AbonoService();
-        consec_abono = as.Abonar(Integer.parseInt(Pago.getText()), Integer.parseInt(Lectura_pago), id_tipo, id_desc, referencias);
+        consec_abono = as.Abonar(Pagado, Integer.parseInt(Lectura_pago), id_tipo, id_desc, referencias, Recibido);
         if (consec_abono == -1) {
-            JOptionPane.showMessageDialog(null, "No se pudo registrar el pago", "Error", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Pago exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-
-            InsertarTicket();
-
+            MensajeError("No se pudo registrar el pago", Pago);
+            Generando.setVisible(false);
+            Pagar.setEnabled(true);
             Dato.setEditable(true);
             Busqueda.setEnabled(true);
             Buscar.setEnabled(true);
             Pago.setEditable(true);
             D_pago.setEnabled(true);
             T_pago.setEnabled(true);
+        } else {
+            MensajeError("Pago exitoso", Dato);
+            InsertarTicket();
 
-            
             Contrato.setText("");
             N_cte.setText("");
             Celular.setText("");
-            Municipio.setText("");
-            Residencia.setText("");
-            Manzana.setText("");
-            Lote.setText("");
+            Domicilio.setText("");
             Importe.setText(" Deuda total");
             Mes_pagar.setText(" Mes atrasado");
-            Meses_adeudo.setText("");
+            model.clear();
+            Adeudo_deuda.setModel(model);
+            Adeudos_mes.setModel(model);
             Pago.setText(" Cantidad a pagar");
+            recibido.setEditable(false);
+            Cambio.setText("$0");
+            Pagar.setEnabled(false);
+            recibido.setText("");
+            Pago.setEditable(false);
             D_pago.setSelectedIndex(0);
             T_pago.setSelectedIndex(0);
         }
     }
-    int ticket;
+    int ticket = 0;
 
     private void InsertarTicket() {
         TicketServicio ts = new TicketServicio();
-        System.out.println(Lectura_pago + " " + consec_abono);
         ticket = ts.InsertTicket(Integer.parseInt(Lectura_pago), consec_abono);
-        System.out.println(ticket);
         if (ticket == -1) {
-            JOptionPane.showMessageDialog(null, "Ticket no registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
+            MensajeError("Ticket no pudo ser registrado", Dato);
         } else {
             PrinterJob pj = PrinterJob.getPrinterJob();
             pj.setPrintable(new BillPrintable(), getPageFormat(pj));
@@ -915,7 +973,7 @@ int contrato_id = 0;
     public class BillPrintable implements Printable {
 
         public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-            ImageIcon icon = new ImageIcon("icons8-water-100.png");
+
             int result = NO_SUCH_PAGE;
             pag = Float.parseFloat(Pago.getText());
             imp = Float.parseFloat(Importe.getText());
@@ -930,8 +988,6 @@ int contrato_id = 0;
                     int yShift = 12;
                     int headerRectHeight = 15;
                     g2d.setFont(new Font("Monospaced", Font.PLAIN, 9));
-                    g2d.drawImage(icon.getImage(), 100, 400, 85, 75, null);
-                    y += yShift + 100;
                     g2d.drawString("--------------------------------------------------" + "      " + "--------------------------------------------------", 12, y);
                     y += yShift;
                     g2d.drawString("GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V." + "        " + "GESTION DE SERVICIO PUBLICO DE AGUA, S.A DE C.V.", 12, y);
@@ -942,33 +998,31 @@ int contrato_id = 0;
                     y += yShift;
                     g2d.drawString(" OPERADOR " + "             " + " Fecha: " + dtf.format(LocalDateTime.now()) + " " + "     " + " OPERADOR " + "             " + " Fecha: " + dtf.format(LocalDateTime.now()), 12, y);
                     y += yShift;
-                    g2d.drawString(" " + lo.getUsuario() + "              " + " Folio de ticket: " + ticket + "     " + "   " + lo.getUsuario() + "              " + " Folio de ticket: " + ticket, 12, y);
+                    g2d.drawString(" " + lo.getUsuario() + " " + " Folio de ticket: " + ticket + "                   " + "   " + lo.getUsuario() + " " + " Folio de ticket: " + ticket, 12, y);
                     y += yShift;
                     g2d.drawString("---------------------------------------------------" + "     " + "---------------------------------------------------", 12, y);
                     y += headerRectHeight;
                     g2d.drawString("               DATOS DEL CLIENTE                    " + "     " + "               DATOS DEL CLIENTE                    ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Nombre: " + N_cte.getText() + "   " + "   " + "             " + " Nombre: " + N_cte.getText() + "   " + "   ", 10, y);
+                    g2d.drawString(" Nombre: " + N_cte.getText() + "   " + "   " + "                    " + " Nombre: " + N_cte.getText() + "   " + "   ", 10, y);
                     y += yShift;
-                    g2d.drawString(" Folio del contrato:  " + contrato_id + "                                 " + " Folio del contrato:  " + contrato_id, 10, y);
+                    g2d.drawString(" Folio del contrato: " + contrato_id + " Folio de cliente: " + Contrato.getText() + "              " + " Folio del contrato:  " + contrato_id + " Folio de cliente: " + Contrato.getText(), 10, y);
                     y += yShift;
-                    g2d.drawString(" Domicilio: " + Residencia.getText() + "   " + "                                    " + " Domicilio: " + Residencia.getText() + "   ", 10, y);
-                    y += yShift;
-                    g2d.drawString(" Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText() + "                       " + " Manzana:  " + Manzana.getText() + "             " + "Lote  " + Lote.getText(), 10, y);
+                    g2d.drawString(" Domicilio: " + Domicilio.getText() + "   " + "              " + " Domicilio: " + Domicilio.getText() + "   ", 10, y);
                     y += yShift;
                     g2d.drawString("---------------------------------------------------" + "     " + "---------------------------------------------------", 10, y);
                     y += headerRectHeight;
                     g2d.drawString("               DETALLES DEL PAGO                    " + "     " + "               DETALLES DEL PAGO                    ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Mes del pago:     " + mes + "   " + "                         " + "Mes del pago:     " + mes + "   ", 10, y);
+                    g2d.drawString(" Mes del pago:     " + mes + "   " + "                            " + "Mes del pago:     " + mes + "   ", 10, y);
                     y += yShift;
-                    g2d.drawString(" Tipo de consumo:  " + consumo + " " + "                        " + " Tipo de consumo:  " + consumo + " ", 10, y);
+                    g2d.drawString(" Tipo de consumo:  " + consumo + " " + "                             " + " Tipo de consumo:  " + consumo + " ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Cargo generado:    $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString() + "          " + " Cargo generado:    $" + Importe.getText() + "           " + T_pago.getSelectedItem().toString(), 10, y);
+                    g2d.drawString(" Cargo generado:    $" + Importe.getText() + "         " + T_pago.getSelectedItem().toString() + "             " + " Cargo generado:    $" + Importe.getText() + "         " + T_pago.getSelectedItem().toString(), 10, y);
                     y += yShift;
-                    g2d.drawString(" Descuento:         %" + porcentaje + " " + "                               " + " Descuento:         %" + porcentaje + " ", 10, y);
+                    g2d.drawString(" Descuento:         %" + porcentaje + " " + "                                 " + " Descuento:         %" + porcentaje + " ", 10, y);
                     y += headerRectHeight;
-                    g2d.drawString(" Monto del pago:    $" + Pago.getText() + "" + "                                 " + " Monto del pago:    $" + Pago.getText() + "", 10, y);
+                    g2d.drawString(" Monto del pago:    $" + Pago.getText() + "" + "                                  " + " Monto del pago:    $" + Pago.getText() + "", 10, y);
                     y += headerRectHeight;
                     g2d.drawString(" Total:             $" + total + "" + "                              " + " Total:             $" + total + "", 10, y);
                     y += headerRectHeight;
@@ -995,42 +1049,43 @@ int contrato_id = 0;
         new Hilos().show();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> Adeudo_deuda;
+    private javax.swing.JList<String> Adeudos_mes;
     private javax.swing.JButton Buscar;
     private javax.swing.JComboBox<String> Busqueda;
+    private javax.swing.JTextField Cambio;
     private javax.swing.JLabel Cargando;
     private javax.swing.JTextField Celular;
     private javax.swing.JTextField Contrato;
     private javax.swing.JComboBox<String> D_pago;
     private javax.swing.JTextField Dato;
+    private javax.swing.JTextField Domicilio;
     private javax.swing.JLabel Generando;
     private javax.swing.JTextField Importe;
-    private javax.swing.JTextField Lote;
-    private javax.swing.JTextField Manzana;
     private javax.swing.JLabel Mes_adeudo;
     private javax.swing.JLabel Mes_adeudo1;
     private javax.swing.JTextField Mes_pagar;
-    private javax.swing.JTextArea Meses_adeudo;
-    private javax.swing.JTextField Municipio;
     private javax.swing.JTextField N_cte;
+    private javax.swing.JLabel Nombre;
     private javax.swing.JButton Pagar;
     private javax.swing.JTextField Pago;
     private javax.swing.JLabel Referencia;
-    private javax.swing.JTextField Residencia;
     private javax.swing.JComboBox<String> T_pago;
     private javax.swing.JLabel contrato;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField recibido;
     private javax.swing.JTextField referencia;
     // End of variables declaration//GEN-END:variables
 }

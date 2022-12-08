@@ -28,4 +28,8 @@ public class LecturaPagoServicio {
         int ret = this.lp.InsertarLecturapagoFijo(lecturapago,folio,mes);
         return ret;
     }
+    public int InsertarLecturapagoFijo(float lecturapago,int folio,int mes, boolean fijo){
+        int ret = this.lp.InsertarLecturapagoFijo(lecturapago,folio,mes,fijo);
+        return ret;
+    }
 }

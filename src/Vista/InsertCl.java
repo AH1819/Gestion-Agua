@@ -1,6 +1,7 @@
 package Vista;
 
 import Entity.Cliente;
+import Entity.Clientes_existentes;
 import Entity.Contrato_generado;
 import Entity.ErrorsAndSuccesses;
 import Servicio.ClienteServicio;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
 import java.util.regex.Pattern;
+import javax.swing.JTextField;
 
 public class InsertCl extends javax.swing.JPanel {
 
@@ -879,146 +881,155 @@ public class InsertCl extends javax.swing.JPanel {
     }//GEN-LAST:event_CurpKeyTyped
 
     private void Next_or_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Next_or_saveActionPerformed
+        Clientes_existentes cex = new Clientes_existentes();
+
         boolean ValNombre = ValidarEntradas(name.getText(), " Nombre");
         if (ValNombre == false) {
-            JOptionPane.showMessageDialog(null, "Campo vacio: Nombre", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-            name.requestFocus();
+            MensajeError("Campo vacio: Nombre", name);
         } else {
             boolean ValApp = ValidarEntradas(ap_p.getText(), " Apellido paterno");
             if (ValApp == false) {
-                JOptionPane.showMessageDialog(null, "Campo vacio: Apellido parterno", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                ap_p.requestFocus();
+                MensajeError("Campo vacio: Apellido parterno", ap_p);
             } else {
                 boolean ValApm = ValidarEntradas(ap_m.getText(), " Apellido paterno");
                 if (ValApm == false) {
-                    JOptionPane.showMessageDialog(null, "Campo vacio: Apellido materno", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                    ap_m.requestFocus();
+                    MensajeError("Campo vacio: Apellido materno", ap_m);
                 } else {
-                    boolean ValAñ = ValidarEntradas(Año.getText(), "Año");
-                    if (ValAñ == false) {
-                        JOptionPane.showMessageDialog(null, "Campo vacio: Año ", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                        Año.requestFocus();
-                    } else {
-                        if (Año.getText().trim().length() < 4) {
-                            JOptionPane.showMessageDialog(null, "Año invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                            Año.requestFocus();
+                    for (String nombre_completo : cex.getNombre_completo()) {
+                        if (nombre_completo.toLowerCase().equals(name.getText().toLowerCase().trim() + " " + ap_p.getText().toLowerCase().trim() + " " + ap_m.getText().toLowerCase().trim())) {
+                            MensajeError("Error: Nombre ya existente", name);
+                            return;
                         } else {
-                            boolean ValM = ValidarEntradas(Mes.getText(), "Mes");
-                            if (ValM == false) {
-                                JOptionPane.showMessageDialog(null, "Campo vacio: Año ", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                Mes.requestFocus();
+                            boolean ValAñ = ValidarEntradas(Año.getText(), "Año");
+                            if (ValAñ == false) {
+                                MensajeError("Campo vacio: Año", Año);
                             } else {
-                                if (Mes.getText().trim().length() < 2) {
-                                    JOptionPane.showMessageDialog(null, "Mes invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                    Mes.requestFocus();
+                                if (Año.getText().trim().length() < 4) {
+                                    MensajeError("Año invalido", Año);
                                 } else {
-                                    boolean ValD = ValidarEntradas(Dia.getText(), "Dia");
-                                    if (ValD == false) {
-                                        JOptionPane.showMessageDialog(null, "Campo vacio: Dia ", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                        Dia.requestFocus();
+                                    boolean ValM = ValidarEntradas(Mes.getText(), "Mes");
+                                    if (ValM == false) {
+                                        MensajeError("Campo vacio: Mes", Mes);
                                     } else {
-                                        if (Dia.getText().trim().length() < 2) {
-                                            JOptionPane.showMessageDialog(null, "Dia invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                            Dia.requestFocus();
+                                        if (Mes.getText().trim().length() < 2) {
+                                            MensajeError("Mes invalido", Mes);
                                         } else {
-                                            boolean ValC = ValidarEntradas(Curp.getText(), " Curp");
-                                            if (ValC == false) {
-                                                JOptionPane.showMessageDialog(null, "Campo vacio: Curp", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                Curp.requestFocus();
+                                            boolean ValD = ValidarEntradas(Dia.getText(), "Dia");
+                                            if (ValD == false) {
+                                                MensajeError("Campo vacio: Dia", Dia);
                                             } else {
-                                                boolean vCURP = validarCURP(Curp.getText());
-                                                if (vCURP == false) {
-                                                    JOptionPane.showMessageDialog(null, "Curp invalida", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                    Curp.requestFocus();
+                                                if (Dia.getText().trim().length() < 2) {
+                                                    MensajeError("Dia invalido", Dia);
                                                 } else {
-                                                    boolean Valrfc = ValidarEntradas(RFC.getText(), " RFC");
-                                                    if (Valrfc == false) {
-                                                        rfco = "Sin RFC";
-                                                    } else {//--------------------
-                                                        boolean vRFC = validarRfc(RFC.getText());
-                                                        if (vRFC == false) {
-                                                            JOptionPane.showMessageDialog(null, "RFC invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                            RFC.requestFocus();
-                                                            return;
-                                                        } else {
-                                                            rfco = RFC.getText();
-                                                        }
-                                                    }//-----------
-                                                    boolean Valt = ValidarEntradas(Telefono.getText(), " Numero de telefono");
-                                                    if (Valt == false) {
-                                                        telefonoo = "Sin numero";
+                                                    boolean ValC = ValidarEntradas(Curp.getText(), " Curp");
+                                                    if (ValC == false) {
+                                                        MensajeError("Campo vacio: Curp", Curp);
                                                     } else {
-                                                        telefonoo = Telefono.getText();
-                                                    }
-                                                    boolean ValCel = ValidarEntradas(Celular.getText(), " Numero de celular");
-                                                    if (ValCel == false) {
-                                                        JOptionPane.showMessageDialog(null, "Campo vacio: Celular", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                        Celular.requestFocus();
-                                                        return;
-                                                    } else {
-                                                        if (Celular.getText().trim().length() < 10) {
-                                                            JOptionPane.showMessageDialog(null, "Numero de celular invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                            Celular.requestFocus();
-                                                            return;
-                                                        } else {
-                                                            boolean ValEm = ValidarEntradas(Email.getText(), " Email");
-                                                            if (ValEm == false) {
-                                                                emailo = "Sin email";
-                                                            } else {
-                                                                boolean vEmail = validarEmail(Email.getText());
-                                                                if (vEmail == false) {
-                                                                    JOptionPane.showMessageDialog(null, "Email invalido", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                    Email.requestFocus();
-                                                                    return;
-                                                                } else {
-                                                                    emailo = Email.getText();
-                                                                }
-                                                            }
-                                                            boolean ValMu = ValidarEntradas(Municipio.getText(), " Municipio");
-                                                            if (ValMu == false) {
-                                                                JOptionPane.showMessageDialog(null, "Campo vacio: Municipio", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                Municipio.requestFocus();
+                                                        for (String curp1 : cex.getCurp()) {
+                                                            if (curp1.toLowerCase().equals(Curp.getText().toLowerCase().trim())) {
+                                                                MensajeError("Error: Curp ya existente", Curp);
                                                                 return;
                                                             } else {
-                                                                boolean ValRe = ValidarEntradas(Municipio.getText(), " Col/barrio/fracc");
-                                                                if (ValRe == false) {
-                                                                    JOptionPane.showMessageDialog(null, "Campo vacio: Residencia", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                    Residencia.requestFocus();
-                                                                    return;
+                                                                boolean vCURP = validarCURP(Curp.getText());
+                                                                if (vCURP == false) {
+                                                                    MensajeError("Curp invalida", Curp);
                                                                 } else {
-                                                                    boolean ValNC = ValidarEntradas(Nombre_calle.getText(), " Calle");
-                                                                    if (ValNC == false) {
-                                                                        JOptionPane.showMessageDialog(null, "Campo vacio: Nombre de calle", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                        Nombre_calle.requestFocus();
-                                                                        return;
+                                                                    boolean Valrfc = ValidarEntradas(RFC.getText(), " RFC");
+                                                                    if (Valrfc == false) {
+                                                                        rfco = "Sin RFC";
                                                                     } else {
-                                                                        boolean ValRef = ValidarEntradas(Referencia.getText(), " Calle de referencia");
-                                                                        if (ValRef == false) {
-                                                                            JOptionPane.showMessageDialog(null, "Campo vacio: Calle de referencia", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                            Municipio.requestFocus();
+                                                                        boolean vRFC = validarRfc(RFC.getText());
+                                                                        if (vRFC == false) {
+                                                                            MensajeError("RFC invalido", RFC);
                                                                             return;
                                                                         } else {
-                                                                            boolean ValMa = ValidarEntradas(Manzana.getText(), " Num. Manz");
-                                                                            if (ValMa == false) {
-                                                                                JOptionPane.showMessageDialog(null, "Campo vacio: Numero de Manzana", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                                Manzana.requestFocus();
-                                                                                return;
-                                                                            } else {
-                                                                                boolean ValLt = ValidarEntradas(Lote.getText(), " Num. Lt");
-                                                                                if (ValLt == false) {
-                                                                                    JOptionPane.showMessageDialog(null, "Campo vacio: Numero de Lote", "AVISO", JOptionPane.INFORMATION_MESSAGE);
-                                                                                    Lote.requestFocus();
+                                                                            for (String rfc1 : cex.getRfc()) {
+                                                                                if (rfc1.toLowerCase().equals(RFC.getText().toLowerCase().trim())) {
+                                                                                    MensajeError("Error: RFC ya existente", RFC);
                                                                                     return;
                                                                                 } else {
-                                                                                    new MostrarC().show();
+                                                                                    rfco = RFC.getText();
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
+                                                                    boolean Valt = ValidarEntradas(Telefono.getText(), " Numero de telefono");
+                                                                    if (Valt == false) {
+                                                                        telefonoo = "Sin numero";
+                                                                    } else {
+                                                                        telefonoo = Telefono.getText();
+                                                                    }
+                                                                    boolean ValCel = ValidarEntradas(Celular.getText(), " Numero de celular");
+                                                                    if (ValCel == false) {
+                                                                        MensajeError("Campo vacio: Celular", Celular);
+                                                                        return;
+                                                                    } else {
+                                                                        if (Celular.getText().trim().length() < 10) {
+                                                                            MensajeError("Numero de celular invalido", Celular);
+                                                                            return;
+                                                                        } else {
+                                                                            for (String numero_contacto : cex.getNumero_contacto()) {
+                                                                                if (numero_contacto.equals(Celular.getText().trim())) {
+                                                                                    MensajeError("Error: Numero de celular ya existente", Celular);
+                                                                                    return;
+                                                                                } else {
+                                                                                    boolean ValEm = ValidarEntradas(Email.getText(), " Email");
+                                                                                    if (ValEm == false) {
+                                                                                        emailo = "Sin email";
+                                                                                    } else {
+                                                                                        boolean vEmail = validarEmail(Email.getText());
+                                                                                        if (vEmail == false) {
+                                                                                            MensajeError("Email invalido", Email);
+                                                                                            return;
+                                                                                        } else {
+                                                                                            emailo = Email.getText();
+                                                                                        }
+                                                                                    }///////////
+                                                                                    boolean ValMu = ValidarEntradas(Municipio.getText(), " Municipio");
+                                                                                    if (ValMu == false) {
+                                                                                        MensajeError("Campo vacio: Municipio", Municipio);
+                                                                                        return;
+                                                                                    } else {
+                                                                                        boolean ValRe = ValidarEntradas(Residencia.getText(), " Col/barrio/fracc");
+                                                                                        if (ValRe == false) {
+                                                                                            MensajeError("Campo vacio: Residencia", Residencia);
+                                                                                            return;
+                                                                                        } else {
+                                                                                            boolean ValNC = ValidarEntradas(Nombre_calle.getText(), " Calle");
+                                                                                            if (ValNC == false) {
+                                                                                                MensajeError("Campo vacio: Nombre de calle", Nombre_calle);
+                                                                                                return;
+                                                                                            } else {
+                                                                                                boolean ValRef = ValidarEntradas(Referencia.getText(), " Calle de referencia");
+                                                                                                if (ValRef == false) {
+                                                                                                    MensajeError("Campo vacio: Calle de referencia", Referencia);
+                                                                                                    return;
+                                                                                                } else {
+                                                                                                    boolean ValMa = ValidarEntradas(Manzana.getText(), " Num. Manz");
+                                                                                                    if (ValMa == false) {
+                                                                                                        MensajeError("Campo vacio: Numero de Manzana", Manzana);
+                                                                                                        return;
+                                                                                                    } else {
+                                                                                                        boolean ValLt = ValidarEntradas(Lote.getText(), " Num. Lt");
+                                                                                                        if (ValLt == false) {
+                                                                                                            MensajeError("Campo vacio: Numero de Lote", Lote);
+                                                                                                            return;
+                                                                                                        } else {
+                                                                                                            new MostrarC().show();
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }///////////////////////////
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
-                                                        }
-                                                    }//-----------------------------
+                                                        }////////////////////
+                                                    }
                                                 }
                                             }
                                         }
@@ -1026,10 +1037,11 @@ public class InsertCl extends javax.swing.JPanel {
                                 }
                             }
                         }
-                    }
+                    }///////////////
                 }
             }
         }
+
     }//GEN-LAST:event_Next_or_saveActionPerformed
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
@@ -1310,6 +1322,11 @@ public class InsertCl extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_LoteFocusGained
 
+    private void MensajeError(String campo_e, JTextField campo) {
+        JOptionPane.showMessageDialog(null, campo_e, " AVISO", JOptionPane.INFORMATION_MESSAGE);
+        campo.requestFocus();
+    }
+
     private boolean ValidarEntradas(String var, String comp) {
         return !(var.equals(comp) || var.isEmpty());
     }
@@ -1336,7 +1353,7 @@ public class InsertCl extends javax.swing.JPanel {
         rfco = rfc;
         return rfc.toUpperCase().matches("[A-Z]{4}[0-9]{6}[A-Z0-9]{3}");
     }
-    
+
     private boolean validarCURP(String curp) {
         String regex
                 = "[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}"

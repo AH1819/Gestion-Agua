@@ -6,8 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Det_abonoDao {
     private static ResultSet Resultado;
@@ -17,7 +16,7 @@ public class Det_abonoDao {
     public int InsertarDetAbono(DetAbono detabono){
         int ret = 0;
 
-        String sql = "insert into det_abono(abono,id_lect_pago,id_tipo_pago,id_desc,ticket_ventanilla) values (?,?,?,?,?)";
+        String sql = "insert into det_abono(abono,id_lect_pago,id_tipo_pago,id_desc,ticket_ventanilla,pagado) values (?,?,?,?,?,?)";
         PreparedStatement comando = null;
         
         try {
@@ -28,6 +27,7 @@ public class Det_abonoDao {
             comando.setInt(3, detabono.getId_tipo_pago());
             comando.setInt(4, detabono.getId_desc());
             comando.setString(5, detabono.getFolio_ventanilla());
+            comando.setDouble(6, detabono.getPagado());
             System.out.println(comando);
             comando.executeUpdate();
 
@@ -42,7 +42,7 @@ public class Det_abonoDao {
 
             return ret;
         } catch (SQLException ex) {
-            Logger.getLogger(ContratoDao.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error: "+ex.getMessage(),"Error",JOptionPane.INFORMATION_MESSAGE);
             return -1;
         }
     }

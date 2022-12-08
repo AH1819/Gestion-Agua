@@ -123,6 +123,7 @@ public class ClienteDao {
                 cl.setEmail(Resultado.getString("email"));
                 cl.setStatus(Resultado.getString("status"));
                 cl.setRfc(Resultado.getString("rfc"));
+                cl.setCurp(Resultado.getString("curp"));
                 CL.add(cl);
             }
             conexion.conectar().close();
@@ -308,7 +309,7 @@ public class ClienteDao {
     public List<Cliente>Pagocl_num(String numero){
         List<Cliente> lista = new ArrayList<>();
         
-        String sql = "select cl.folio_cte,folio_contrato,cl.celular,cl.nombre, cl.apellido_p, cl.apellido_m,cl.telefono,ct.municipio,ct.residencia,ct.numero_mzn,ct.numero_lt,ct.deuda "
+        String sql = "select cl.folio_cte,ct.folio_contrato,cl.celular,cl.nombre, cl.apellido_p, cl.apellido_m,cl.telefono,ct.municipio,ct.residencia,ct.numero_mzn,ct.numero_lt,ct.deuda "
                 + "from contrato ct "
                 + "inner join cliente cl "
                 + "on cl.folio_cte = ct.folio_cte "
@@ -322,6 +323,7 @@ public class ClienteDao {
             while(Resultado.next()){
                 Cliente cl = new Cliente();
                 cl.setFolio(Resultado.getInt("folio_cte"));
+                cl.setFolioc(Resultado.getInt("folio_contrato"));
                 cl.setCelular(Resultado.getString("celular"));
                 cl.setNombre(Resultado.getString("nombre"));
                 cl.setApellido_p(Resultado.getString("apellido_p"));
@@ -345,7 +347,7 @@ public class ClienteDao {
     public List<Cliente>Pagocl_numT(String numero){
         List<Cliente> lista = new ArrayList<>();
         
-        String sql = "select cl.folio_cte,cl.telefono,cl.celular,cl.nombre, cl.apellido_p, cl.apellido_m,cl.celular,ct.municipio,ct.residencia,ct.numero_mzn,ct.numero_lt,ct.deuda "
+        String sql = "select cl.folio_cte,ct.folio_contrato,cl.telefono,cl.celular,cl.nombre, cl.apellido_p, cl.apellido_m,cl.celular,ct.municipio,ct.residencia,ct.numero_mzn,ct.numero_lt,ct.deuda "
                 + "from contrato ct "
                 + "inner join cliente cl "
                 + "on cl.folio_cte = ct.folio_cte "
@@ -359,6 +361,7 @@ public class ClienteDao {
             while(Resultado.next()){
                 Cliente cl = new Cliente();
                 cl.setFolio(Resultado.getInt("folio_cte"));
+                cl.setFolioc(Resultado.getInt("folio_contrato"));
                 cl.setTelefono(Resultado.getString("telefono"));
                 cl.setNombre(Resultado.getString("nombre"));
                 cl.setApellido_p(Resultado.getString("apellido_p"));

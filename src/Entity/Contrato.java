@@ -1,5 +1,7 @@
 package Entity;
 
+import java.sql.Date;
+
 public class Contrato {
 
     private Integer folioContrato;
@@ -19,7 +21,8 @@ public class Contrato {
     private String tipo_consumo;
     private String tipo_periodo;
     private String nombre;
-
+    private Date creacion_contrato;
+    
     public Integer getFolioContrato() {
         return folioContrato;
     }
@@ -147,7 +150,7 @@ public class Contrato {
     public void setTipo_periodo(String tipo_periodo) {
         this.tipo_periodo = tipo_periodo;
     }
-
+    
     public Contrato() {
     }
 
@@ -204,5 +207,12 @@ public class Contrato {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+
+    public Date getCreacion_contrato() {
+        return creacion_contrato;
+    }
+
+    public void setCreacion_contrato(Date creacion_contrato) {
+        this.creacion_contrato = creacion_contrato;
+    }
 }

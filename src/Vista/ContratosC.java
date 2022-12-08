@@ -112,7 +112,7 @@ public class ContratosC extends javax.swing.JDialog {
                 CerrarKeyTyped(evt);
             }
         });
-        jPanel1.add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, -1, -1));
+        jPanel1.add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
         jPanel1.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 230, 20));
 
         nombre.setText("Nombre:");

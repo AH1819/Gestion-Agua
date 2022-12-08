@@ -1,6 +1,7 @@
 package Vista;
 
 import Entity.Cliente;
+import Entity.Clientes_existentes;
 import Entity.ErrorsAndSuccesses;
 import Servicio.ClienteServicio;
 import static Vista.Interfaz2.content;
@@ -429,14 +430,24 @@ public class Clientes extends javax.swing.JPanel {
             }
         }
     }
-
+    String[] Clientes;
+    String[] Numeros;
+    String[] RFC;
+    String[] CURPS;
     private void Mostrar() {
         ClienteServicio cs = new ClienteServicio();
         List<Cliente> lista = cs.MostrarClientes();
         int tam = lista.size();
         String list[][] = new String[tam][7];
-
+        Clientes = new String[tam];
+        Numeros = new String[tam];
+        RFC = new String[tam];
+        CURPS = new String[tam];
         for (int i = 0; i < tam; i++) {
+            Clientes[i] = lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m();
+            Numeros[i] = list[i][3] = lista.get(i).getCelular();
+            RFC[i] = lista.get(i).getRfc();
+            CURPS[i] = lista.get(i).getCurp();
             list[i][0] = lista.get(i).getFolio().toString();
             list[i][1] = lista.get(i).getNombre() + " " + lista.get(i).getApellido_p() + " " + lista.get(i).getApellido_m();
             list[i][2] = lista.get(i).getFecha_nac().toString();
@@ -445,6 +456,7 @@ public class Clientes extends javax.swing.JPanel {
             list[i][5] = lista.get(i).getRfc();
             list[i][6] = lista.get(i).getStatus();
         }
+        Clientes_existentes cex = new Clientes_existentes(Clientes, Numeros, RFC, CURPS);
         Mostrar.setModel(new javax.swing.table.DefaultTableModel(
                 list,
                 new String[]{
