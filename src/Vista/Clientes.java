@@ -3,6 +3,7 @@ package Vista;
 import Entity.Cliente;
 import Entity.Clientes_existentes;
 import Entity.ErrorsAndSuccesses;
+import Entity.MiRenderer;
 import Servicio.ClienteServicio;
 import static Vista.Interfaz2.content;
 import java.awt.BorderLayout;
@@ -10,16 +11,19 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class Clientes extends javax.swing.JPanel {
 
     String opcion;
     ErrorsAndSuccesses es = new ErrorsAndSuccesses();
+
     public Clientes() {
         initComponents();
         es.setUbicacion("cliente");
@@ -44,7 +48,6 @@ public class Clientes extends javax.swing.JPanel {
                 }
                 if (evt.getClickCount() == 2) {
                     try {
-
                         usrnm.setText(Mostrar.getValueAt(Mostrar.getSelectedRow(), 0).toString());
                         opcion = "Contratos cliente";
                         new Hilos().show();
@@ -54,6 +57,14 @@ public class Clientes extends javax.swing.JPanel {
                 }
             }
         });
+    }
+
+    public void setCellRender(JTable table) {
+        Enumeration<TableColumn> en = table.getColumnModel().getColumns();
+        while (en.hasMoreElements()) {
+            TableColumn tc = en.nextElement();
+            tc.setCellRenderer(new MiRenderer());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -297,8 +308,8 @@ public class Clientes extends javax.swing.JPanel {
             jScrollPane2.setVisible(false);
             Cargando.setVisible(true);
             Mostrar();
-            Cargando.setVisible(true);
-
+            Cargando.setVisible(false);
+            setCellRender(Mostrar);
             Mostrar.setVisible(true);
             jScrollPane2.setVisible(true);
 
@@ -434,6 +445,7 @@ public class Clientes extends javax.swing.JPanel {
     String[] Numeros;
     String[] RFC;
     String[] CURPS;
+
     private void Mostrar() {
         ClienteServicio cs = new ClienteServicio();
         List<Cliente> lista = cs.MostrarClientes();

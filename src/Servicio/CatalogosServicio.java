@@ -41,8 +41,4 @@ public class CatalogosServicio {
         boolean status = this.cd.Insertar_Periodo(tipo,meses);
         return status;
     }
-    /*public boolean Existencia_Consumo(String tipo){
-        boolean status = cd.Existencia_Consumo(tipo);
-        return status;
-    }*/
 }

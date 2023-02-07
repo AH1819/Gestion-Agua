@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 public class Conexion_login extends javax.swing.JFrame {
 
+    int Xmouse, Ymouse;
     Logeo p1 = new Logeo();
     Conexion p0 = new Conexion();
     ErrorsAndSuccesses er = new ErrorsAndSuccesses();
@@ -57,6 +58,14 @@ public class Conexion_login extends javax.swing.JFrame {
         Host.setBackground(new java.awt.Color(255, 255, 255));
         Host.setForeground(new java.awt.Color(0, 0, 0));
         Host.setText(" Ingrese la direccion host del servidor");
+        Host.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                HostFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                HostFocusLost(evt);
+            }
+        });
         Host.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 HostMousePressed(evt);
@@ -85,6 +94,14 @@ public class Conexion_login extends javax.swing.JFrame {
         Bd.setBackground(new java.awt.Color(255, 255, 255));
         Bd.setForeground(new java.awt.Color(0, 0, 0));
         Bd.setText(" Ingrese el nombre de la base de datos");
+        Bd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                BdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                BdFocusLost(evt);
+            }
+        });
         Bd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 BdMousePressed(evt);
@@ -161,6 +178,16 @@ public class Conexion_login extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Datos de conexion");
+        jLabel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jLabel1MouseDragged(evt);
+            }
+        });
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel1MousePressed(evt);
+            }
+        });
         Contenido.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 30));
         Contenido.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 610, 10));
 
@@ -220,31 +247,14 @@ public class Conexion_login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void HostMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HostMousePressed
-        if (Host.getText().equals(" Ingrese la direccion host del servidor")) {
-            Host.setText("");
-        }
-        if (Bd.getText().isEmpty()) {
-            Bd.setText(" Ingrese el nombre de la base de datos");
-        }
-        if (Port.getText().isEmpty()) {
-            Port.setText(" Ingrese el puerto de conexion");
-        }
+
     }//GEN-LAST:event_HostMousePressed
 
     private void HostMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HostMouseReleased
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_HostMouseReleased
 
     private void BdMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BdMousePressed
-        if (Host.getText().isEmpty()) {
-            Host.setText(" Ingrese la direccion host del servidor");
-        }
-        if (Bd.getText().equals(" Ingrese el nombre de la base de datos")) {
-            Bd.setText("");
-        }
-        if (Port.getText().isEmpty()) {
-            Port.setText(" Ingrese el puerto de conexion");
-        }
 
     }//GEN-LAST:event_BdMousePressed
 
@@ -253,138 +263,32 @@ public class Conexion_login extends javax.swing.JFrame {
     }//GEN-LAST:event_BdMouseReleased
 
     private void PortMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PortMousePressed
-        if (Host.getText().isEmpty()) {
-            Host.setText(" Ingrese la direccion host del servidor");
-        }
-        if (Bd.getText().isEmpty()) {
-            Bd.setText(" Ingrese el nombre de la base de datos");
-        }
-        if (Port.getText().equals(" Ingrese el puerto de conexion")) {
-            Port.setText("");
-        }
+
     }//GEN-LAST:event_PortMousePressed
 
     private void PortMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PortMouseReleased
 
     }//GEN-LAST:event_PortMouseReleased
 
-    private void ExitjlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseClicked
-        this.dispose();
-        Login p2 = new Login();
-        p2.setVisible(true);
-    }//GEN-LAST:event_ExitjlabelMouseClicked
-
-    private void ExitjlabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseEntered
-        // TODO add your handling code here:
-        exit.setBackground(new Color(242, 44, 44));
-        Exitjlabel.setForeground(Color.white);
-    }//GEN-LAST:event_ExitjlabelMouseEntered
-
-    private void ExitjlabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseExited
-        // TODO add your handling code here:
-        exit.setBackground(Color.white);
-        Exitjlabel.setForeground(Color.BLACK);
-    }//GEN-LAST:event_ExitjlabelMouseExited
-
     private void BdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BdActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_BdActionPerformed
     PersistenciaLogeo pl = new PersistenciaLogeo();
     private void HostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_HostKeyReleased
-
-        if (Host.getText().equals(" Ingrese la direccion host del servidor" + evt.getKeyChar())) {
-            Host.setText("");
-        }
-        if (Host.getText().isEmpty()) {
-            Host.setText(String.valueOf(evt.getKeyChar()));
-        }
-        if (Host.getText().isEmpty()) {
-            if (evt.getKeyChar() == 'ñ' || evt.getKeyChar() == 'Ñ') {
-                Host.setText(String.valueOf(evt.getKeyChar()));
-            }
-        }
-
-        if (evt.getKeyCode() == 9) {
-
-            if (Host.getText().equals(" Ingrese la direccion host del servidor")) {
-                Host.setText("");
-            }
-        }
-        if (Host.getText().equals(" Ingrese la direccion host del servido")) {
-            Host.setText("");
-        }
-
         if (evt.getKeyCode() == 10) {
-
             Bd.requestFocus();
-            if (Host.getText().isEmpty()) {
-                Host.setText(" Ingrese la direccion host del servidor");
-            }
-            if (Bd.getText().isEmpty()) {
-                Bd.setText(" Ingrese el nombre de la base de datos");
-            }
-            if (Bd.getText().equals(" Ingrese el nombre de la base de datos")) {
-                Bd.setText("");
-            }
         }
     }//GEN-LAST:event_HostKeyReleased
 
     private void BdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BdKeyReleased
-        if (Bd.getText().equals(" Ingrese el nombre de la base de datos" + evt.getKeyChar())) {
-            Bd.setText("");
-        }
-        if (Bd.getText().isEmpty()) {
-            if (evt.getKeyChar() == 'ñ' || evt.getKeyChar() == 'Ñ') {
-                Bd.setText(String.valueOf(evt.getKeyChar()));
-            }
-        }
-
-        if (evt.getKeyCode() == 9) {
-
-            if (Bd.getText().equals(" Ingrese el nombre de la base de datos")) {
-                Bd.setText("");
-            }
-        }
-        if (Bd.getText().equals(" Ingrese el nombre de la base de datos")) {
-            Bd.setText("");
-        }
-
         if (evt.getKeyCode() == 10) {
-
             Port.requestFocus();
-            if (Bd.getText().isEmpty()) {
-                Bd.setText(" Ingrese el nombre de la base de datos");
-            }
-            if (Port.getText().isEmpty()) {
-                Port.setText(" Ingrese el puerto de conexion");
-            }
-            if (Port.getText().equals(" Ingrese el puerto de conexion")) {
-                Port.setText("");
-            }
         }
     }//GEN-LAST:event_BdKeyReleased
 
     private void PortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PortKeyReleased
-        if (evt.getKeyCode() > 64 && evt.getKeyCode() < 91) {
-            if (Port.getText().equals(" Ingrese el puerto de conexion" + evt.getKeyChar())) {
-                Port.setText("");
-            }
-            if (Port.getText().isEmpty()) {
-                Port.setText(String.valueOf(evt.getKeyChar()));
-            }
-        }
-        if (Port.getText().isEmpty()) {
-            if (evt.getKeyChar() == 'ñ' || evt.getKeyChar() == 'Ñ') {
-                Port.setText(String.valueOf(evt.getKeyChar()));
-            }
-        }
-        if (evt.getKeyCode() == 9) {
-            if (Port.getText().equals(" Ingrese el puerto de conexion")) {
-                Port.setText("");
-            }
-        }
-        if (Port.getText().equals(" Ingrese el puerto de conexio")) {
-            Port.setText("");
+        if (evt.getKeyCode() == 10) {
+            Save.requestFocus();
         }
     }//GEN-LAST:event_PortKeyReleased
 
@@ -421,6 +325,58 @@ public class Conexion_login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_SaveActionPerformed
+
+    private void HostFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_HostFocusGained
+        if (Host.getText().equals(" Ingrese la direccion host del servidor")) {
+            Host.setText("");
+        }
+    }//GEN-LAST:event_HostFocusGained
+
+    private void HostFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_HostFocusLost
+        if (Host.getText().isEmpty()) {
+            Host.setText(" Ingrese la direccion host del servidor");
+        }
+    }//GEN-LAST:event_HostFocusLost
+
+    private void BdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_BdFocusGained
+        if (Bd.getText().equals(" Ingrese el nombre de la base de datos")) {
+            Bd.setText("");
+        }
+    }//GEN-LAST:event_BdFocusGained
+
+    private void BdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_BdFocusLost
+        if (Bd.getText().isEmpty()) {
+            Bd.setText(" Ingrese el nombre de la base de datos");
+        }
+    }//GEN-LAST:event_BdFocusLost
+
+    private void ExitjlabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseExited
+        // TODO add your handling code here:
+        exit.setBackground(Color.white);
+        Exitjlabel.setForeground(Color.BLACK);
+    }//GEN-LAST:event_ExitjlabelMouseExited
+
+    private void ExitjlabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseEntered
+        exit.setBackground(new Color(242, 44, 44));
+        Exitjlabel.setForeground(Color.white);
+    }//GEN-LAST:event_ExitjlabelMouseEntered
+
+    private void ExitjlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitjlabelMouseClicked
+        this.dispose();
+        Login p2 = new Login();
+        p2.setVisible(true);
+    }//GEN-LAST:event_ExitjlabelMouseClicked
+
+    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
+        Xmouse = evt.getX();
+        Ymouse = evt.getY();
+    }//GEN-LAST:event_jLabel1MousePressed
+
+    private void jLabel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - Xmouse, y - Ymouse);
+    }//GEN-LAST:event_jLabel1MouseDragged
 
     public class conectar implements Runnable {
 

@@ -1,11 +1,11 @@
 package Entity;
 
 public class Logeo{
-    private static String usuario;
-    private static String password;
-    private static String puerto;
-    private static String ip;
-    private static String base;
+    private static String usuario = "postgres";
+    private static String password = "AH18192001";
+    private static String puerto = "5432";
+    private static String ip = "localhost";
+    private static String base = "GSPA";
 
     public Logeo() {
     }

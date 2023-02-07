@@ -1,10 +1,12 @@
 package Vista;
 
 import Entity.ErrorsAndSuccesses;
+import Entity.Jasper;
 import Entity.Logeo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
+import static java.lang.Thread.sleep;
 import java.time.LocalDate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -12,20 +14,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.greenrobot.eventbus.EventBus;
 
-public class Interfaz2 extends javax.swing.JFrame {
+public class Interfaz2 extends javax.swing.JFrame implements Runnable {
 
     int Xmouse, Ymouse;
     Principal p1 = new Principal();
     ErrorsAndSuccesses es = new ErrorsAndSuccesses();
     public static EventBus eventos = new EventBus();
-    public static EventBus contratos = new EventBus();
+    public static EventBus pago = new EventBus();
     Logeo p0 = new Logeo();
     int cerrar;
     String ventana;
 
     public Interfaz2() {
         initComponents();
-
+        Ayuntamiento.setVisible(false);
         this.setLocationRelativeTo(null);
         LocalDate now = LocalDate.now();
         ImageIcon imgIcon = new ImageIcon(getClass().getResource("/Imagenes/logogspa.png"));
@@ -36,7 +38,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         int dia = now.getDayOfMonth();
         int month = now.getMonthValue();
         String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-            "Octubre", "Noviembre", "Diciemrbre"};
+            "Octubre", "Noviembre", "Diciembre"};
         fecha.setText("Hoy es " + dia + " de " + meses[month - 1] + " de " + year);
 
         p1.setSize(1030, 500);
@@ -52,24 +54,9 @@ public class Interfaz2 extends javax.swing.JFrame {
         } else {
             Admin.setVisible(false);
         }
-        new Thread() {
-            public void run() {
-                int x = 1000;
-                int y = Ayuntamiento.getLocation().y;
+        Thread hilo = new Thread(this);
 
-                while (true) {
-                    x--;
-                    if (x < -300) {
-                        x = 1000;
-                    }
-                    Ayuntamiento.setLocation(x, y);
-                    try {
-                        sleep(9);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        }.start();
+        hilo.start();
     }
 
     @SuppressWarnings("unchecked")
@@ -99,10 +86,14 @@ public class Interfaz2 extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         About = new javax.swing.JLabel();
         espacio = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        Reportes = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        ReportesSelector = new javax.swing.JComboBox<>();
         Admin = new javax.swing.JPanel();
         Admin_l = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         Title = new javax.swing.JPanel();
         exit = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -299,6 +290,55 @@ public class Interfaz2 extends javax.swing.JFrame {
         });
         espacio.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        espacio.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, -40, -1, 40));
+
+        Menu.add(espacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 260, 100));
+
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        Menu.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 30));
+
+        Reportes.setBackground(new java.awt.Color(18, 90, 173));
+        Reportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ReportesMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ReportesMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ReportesMousePressed(evt);
+            }
+        });
+        Reportes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/file-chart.png"))); // NOI18N
+        Reportes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
+
+        ReportesSelector.setBackground(new java.awt.Color(18, 90, 173));
+        ReportesSelector.setForeground(new java.awt.Color(255, 255, 255));
+        ReportesSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Reportes", "Reporte de adeudos" }));
+        ReportesSelector.setBorder(null);
+        ReportesSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReportesSelectorActionPerformed(evt);
+            }
+        });
+        Reportes.add(ReportesSelector, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 180, 50));
+
+        Menu.add(Reportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 260, 50));
+
         Admin.setBackground(new java.awt.Color(18, 90, 173));
         Admin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -323,12 +363,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icons8-administrador-del-sistema-macho-32 (1).png"))); // NOI18N
         Admin.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
 
-        espacio.add(Admin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 50));
-
-        Menu.add(espacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 260, 200));
-
-        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
-        Menu.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 30));
+        Menu.add(Admin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 260, 50));
 
         Background.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 640));
 
@@ -412,7 +447,6 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         Ayuntamiento.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Ayuntamiento.setForeground(new java.awt.Color(255, 255, 255));
-        Ayuntamiento.setText("H. Ayuntamiento de Cacahoatán");
         Header.add(Ayuntamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, 260, 34));
 
         Background.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 1030, 110));
@@ -439,7 +473,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_prinMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_prinMouseExited
         if (btn_service.getBackground().getRGB() != -15574355 || btn_contrato.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 
+                || btn_clientes.getBackground().getRGB() != -15574355
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_prin);
@@ -470,7 +504,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
     private void btn_serviceMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_serviceMouseExited
         if (btn_prin.getBackground().getRGB() != -15574355 || btn_contrato.getBackground().getRGB() != -15574355
-                || btn_clientes.getBackground().getRGB() != -15574355 
+                || btn_clientes.getBackground().getRGB() != -15574355
                 || Admin.getBackground().getRGB() != -15574355 || Aboutus.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
             resetColor(btn_service);
@@ -559,12 +593,12 @@ public class Interfaz2 extends javax.swing.JFrame {
         resetColor(btn_clientes);
         resetColor(btn_prin);
 
-        Administrador p1 = new Administrador();
-        p1.setSize(1030, 500);
-        p1.setLocation(0, 0);
+        Administrador Adm = new Administrador();
+        Adm.setSize(1030, 500);
+        Adm.setLocation(0, 0);
 
         content.removeAll();
-        content.add(p1, BorderLayout.CENTER);
+        content.add(Adm, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
     }//GEN-LAST:event_AdminMousePressed
@@ -576,7 +610,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_Login_exitMouseEntered
 
     private void Login_exitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Login_exitMouseExited
-        if ( btn_service.getBackground().getRGB() != -15574355
+        if (btn_service.getBackground().getRGB() != -15574355
                 || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
                 || btn_clientes.getBackground().getRGB() != -15574355 || Admin.getBackground().getRGB() != -15574355
                 || Aboutus.getBackground().getRGB() != -15574355) {
@@ -597,7 +631,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_Login_exitMousePressed
 
     private void exitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseEntered
-    exit.setBackground(new Color(204, 0, 0));
+        exit.setBackground(new Color(204, 0, 0));
         exit.setForeground(Color.white);
     }//GEN-LAST:event_exitMouseEntered
 
@@ -607,7 +641,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMouseExited
 
     private void exitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMousePressed
-               System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_exitMousePressed
 
     private void TitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TitleMouseDragged
@@ -640,7 +674,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_AboutusMousePressed
 
     private void AboutusMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AboutusMouseExited
-        if ( btn_service.getBackground().getRGB() != -15574355
+        if (btn_service.getBackground().getRGB() != -15574355
                 || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
                 || btn_clientes.getBackground().getRGB() != -15574355 || Admin.getBackground().getRGB() != -15574355
                 || Login_exit.getBackground().getRGB() != -15574355) {
@@ -669,12 +703,63 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         this.setExtendedState(ICONIFIED);
     }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void ReportesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportesMouseEntered
+        if (Reportes.getBackground().getRGB() == -15574355) {
+            setColor(Reportes);
+        }
+    }//GEN-LAST:event_ReportesMouseEntered
+
+    private void ReportesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportesMouseExited
+        if (btn_service.getBackground().getRGB() != -15574355
+                || btn_contrato.getBackground().getRGB() != -15574355 || btn_prin.getBackground().getRGB() != -15574355
+                || btn_clientes.getBackground().getRGB() != -15574355 || Admin.getBackground().getRGB() != -15574355
+                || Login_exit.getBackground().getRGB() != -15574355) {
+            resetColor(Reportes);
+        }
+    }//GEN-LAST:event_ReportesMouseExited
+
+    private void ReportesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportesMousePressed
+
+    }//GEN-LAST:event_ReportesMousePressed
+
+    private void ReportesSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportesSelectorActionPerformed
+        if (ReportesSelector.getSelectedIndex() > 0) {
+            if (ReportesSelector.getSelectedIndex() == 1) {
+                new Thread() {
+                    public void run() {
+                        Jasper js = new Jasper();
+                        js.Generar_Reporte();
+                    }
+                }.start();
+            }
+        }
+    }//GEN-LAST:event_ReportesSelectorActionPerformed
     void setColor(JPanel panel) {
         panel.setBackground(new Color(21, 101, 192));
     }
 
     void resetColor(JPanel panel) {
         panel.setBackground(new Color(18, 90, 173));
+    }
+
+    @Override
+    public void run() {
+        int x = 1000;
+        int y = Ayuntamiento.getLocation().y;
+        Ayuntamiento.setText("H. Ayuntamiento de Cacahoatán");
+        while (true) {
+            Ayuntamiento.setVisible(true);
+            x--;
+            if (x < -300) {
+                x = 1000;
+            }
+            Ayuntamiento.setLocation(x, y);
+            try {
+                sleep(9);
+            } catch (Exception e) {
+            }
+        }
     }
 
     public class MostrarPanel implements Runnable {
@@ -728,7 +813,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         pg.setSize(1030, 500);
         pg.setLocation(0, 0);
 
-        eventos.register(pg);
+        pago.register(pg);
         content.removeAll();
         content.add(pg, BorderLayout.CENTER);
         content.revalidate();
@@ -777,7 +862,7 @@ public class Interfaz2 extends javax.swing.JFrame {
             }
         }
 
-        if (es.getUbicacion().equals("insert contrato")) {
+        if (es.getUbicacion().equals("insert contrato")||es.getUbicacion().equals("cliente contrato")) {
 
             String[] arreglo = {"Si", "No"};
             int opcionp = JOptionPane.showOptionDialog(null, "¿Desea descartar los datos?", "Creacion", 0, JOptionPane.QUESTION_MESSAGE, null, arreglo, "Si");
@@ -791,18 +876,7 @@ public class Interfaz2 extends javax.swing.JFrame {
         if (es.getUbicacion().equals("editar contrato")) {
 
             String[] arreglo = {"Si", "No"};
-            int opcionp = JOptionPane.showOptionDialog(null, "¿Desea descartar los datos?", "Creacion", 0, JOptionPane.QUESTION_MESSAGE, null, arreglo, "Si");
-            if (arreglo[opcionp].equals("Si")) {
-                cerrar = 1;
-                es.setUbicacion("null");
-            } else {
-                cerrar = -1;
-            }
-        }
-        if (es.getUbicacion().equals("cliente contrato")) {
-
-            String[] arreglo = {"Si", "No"};
-            int opcionp = JOptionPane.showOptionDialog(null, "¿Desea descartar los datos?", "Creacion", 0, JOptionPane.QUESTION_MESSAGE, null, arreglo, "Si");
+            int opcionp = JOptionPane.showOptionDialog(null, "¿Desea descartar los datos?", "Modificacion", 0, JOptionPane.QUESTION_MESSAGE, null, arreglo, "Si");
             if (arreglo[opcionp].equals("Si")) {
                 cerrar = 1;
                 es.setUbicacion("null");
@@ -824,6 +898,8 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JLabel Logo;
     private javax.swing.JPanel Menu;
     private javax.swing.JLabel Princ;
+    public static javax.swing.JPanel Reportes;
+    private javax.swing.JComboBox<String> ReportesSelector;
     private javax.swing.JPanel Title;
     private javax.swing.JPanel btn_clientes;
     private javax.swing.JPanel btn_contrato;
@@ -839,6 +915,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -846,6 +923,7 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

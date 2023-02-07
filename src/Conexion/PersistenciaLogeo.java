@@ -22,7 +22,6 @@ public class PersistenciaLogeo {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error -->\n" + e, "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
 
     public void Leer() {
@@ -37,7 +36,9 @@ public class PersistenciaLogeo {
             obji.close();
             fichero.close();
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "No se a configurado la conexion\n", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se a configurado la conexion\n Usando base local", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            PersistenciaLogin p = new PersistenciaLogin("localhost", "GSPA", "5432");
+            Guardar(p);
         }
     }
 }

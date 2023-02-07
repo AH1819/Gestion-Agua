@@ -20,4 +20,5 @@ public class Cat_Consumo {
     public void setTipo_consumo(String tipo_consumo) {
         this.tipo_consumo = tipo_consumo;
     }
+    
 }

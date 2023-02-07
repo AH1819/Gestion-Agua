@@ -5,12 +5,17 @@ import Entity.Cat_pago;
 import Entity.Cliente;
 import Entity.LecturaPago;
 import Entity.Logeo;
+import Entity.ticket_generado;
+import Entity.pie_pagina;
 import Servicio.AbonoService;
 import Servicio.CatalogosServicio;
 import Servicio.ClienteServicio;
 import Servicio.DescuentoServicio;
+import Servicio.InformativoServicio;
 import Servicio.LecturaPagoServicio;
 import Servicio.TicketServicio;
+import static Vista.Interfaz2.content;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -100,24 +105,19 @@ public class Pago extends javax.swing.JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Registro de pago");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 30));
         add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 1030, 10));
 
         Nombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        Nombre.setForeground(new java.awt.Color(0, 0, 0));
         Nombre.setText("Nombre:");
         add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 70, -1));
 
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Cantidad a pagar:");
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 120, 20));
 
-        Dato.setBackground(new java.awt.Color(255, 255, 255));
-        Dato.setForeground(new java.awt.Color(0, 0, 0));
         Dato.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 DatoFocusGained(evt);
@@ -148,7 +148,6 @@ public class Pago extends javax.swing.JPanel {
 
         Pago.setEditable(false);
         Pago.setBackground(new java.awt.Color(255, 255, 255));
-        Pago.setForeground(new java.awt.Color(0, 0, 0));
         Pago.setText(" Cantidad a pagar");
         Pago.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -174,33 +173,27 @@ public class Pago extends javax.swing.JPanel {
         add(Pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 180, 40));
 
         jLabel8.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Celular:");
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, -1, -1));
 
         Celular.setEditable(false);
         Celular.setBackground(new java.awt.Color(255, 255, 255));
-        Celular.setForeground(new java.awt.Color(0, 0, 0));
         add(Celular, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 150, 230, 40));
 
         jLabel9.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Deuda total:");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 210, 100, -1));
 
         jLabel10.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Domicilio:");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 70, -1));
 
         Domicilio.setEditable(false);
         Domicilio.setBackground(new java.awt.Color(255, 255, 255));
-        Domicilio.setForeground(new java.awt.Color(0, 0, 0));
         add(Domicilio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 430, 40));
 
         N_cte.setEditable(false);
         N_cte.setBackground(new java.awt.Color(255, 255, 255));
-        N_cte.setForeground(new java.awt.Color(0, 0, 0));
         N_cte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 N_cteActionPerformed(evt);
@@ -209,13 +202,10 @@ public class Pago extends javax.swing.JPanel {
         add(N_cte, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 430, 40));
 
         jLabel15.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Tipo de pago:");
         add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 290, -1, -1));
 
-        T_pago.setBackground(new java.awt.Color(255, 255, 255));
-        T_pago.setForeground(new java.awt.Color(0, 0, 0));
-        T_pago.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        T_pago.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         T_pago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 T_pagoActionPerformed(evt);
@@ -225,7 +215,6 @@ public class Pago extends javax.swing.JPanel {
 
         Importe.setEditable(false);
         Importe.setBackground(new java.awt.Color(255, 255, 255));
-        Importe.setForeground(new java.awt.Color(0, 0, 0));
         Importe.setText(" Importe acumulado");
         Importe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -234,9 +223,7 @@ public class Pago extends javax.swing.JPanel {
         });
         add(Importe, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 230, 190, 40));
 
-        Busqueda.setBackground(new java.awt.Color(255, 255, 255));
         Busqueda.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        Busqueda.setForeground(new java.awt.Color(0, 0, 0));
         Busqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona una opción", "Folio contrato", "Folio cliente", "Telefono/celular" }));
         Busqueda.setToolTipText("Busqueda por distintos datos");
         Busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -285,7 +272,6 @@ public class Pago extends javax.swing.JPanel {
 
         Contrato.setEditable(false);
         Contrato.setBackground(new java.awt.Color(255, 255, 255));
-        Contrato.setForeground(new java.awt.Color(0, 0, 0));
         Contrato.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 ContratoMousePressed(evt);
@@ -302,7 +288,6 @@ public class Pago extends javax.swing.JPanel {
         add(Contrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 150, 190, 40));
 
         contrato.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        contrato.setForeground(new java.awt.Color(0, 0, 0));
         contrato.setText("Folio del Contrato");
         add(contrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 130, -1, -1));
 
@@ -312,17 +297,13 @@ public class Pago extends javax.swing.JPanel {
 
         Mes_pagar.setEditable(false);
         Mes_pagar.setBackground(new java.awt.Color(255, 255, 255));
-        Mes_pagar.setForeground(new java.awt.Color(0, 0, 0));
         Mes_pagar.setText(" Mes atrasado");
         add(Mes_pagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, 190, 40));
 
         Mes_adeudo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        Mes_adeudo.setForeground(new java.awt.Color(0, 0, 0));
         Mes_adeudo.setText("Mes a pagar:");
         add(Mes_adeudo, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 210, 90, 20));
 
-        D_pago.setBackground(new java.awt.Color(255, 255, 255));
-        D_pago.setForeground(new java.awt.Color(0, 0, 0));
         D_pago.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         D_pago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,7 +313,6 @@ public class Pago extends javax.swing.JPanel {
         add(D_pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 230, 40));
 
         jLabel16.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Descuento:");
         add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 290, 120, -1));
 
@@ -341,51 +321,38 @@ public class Pago extends javax.swing.JPanel {
         add(Generando, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 400, 60, 60));
 
         Mes_adeudo1.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        Mes_adeudo1.setForeground(new java.awt.Color(0, 0, 0));
         Mes_adeudo1.setText("Meses con cargo:");
         add(Mes_adeudo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 120, 20));
-
-        referencia.setBackground(new java.awt.Color(255, 255, 255));
-        referencia.setForeground(new java.awt.Color(0, 0, 0));
         add(referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 390, 230, 40));
 
         Referencia.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        Referencia.setForeground(new java.awt.Color(0, 0, 0));
         Referencia.setText("Folio de ticket:");
         add(Referencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 370, 90, -1));
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Dato a buscar:");
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, -1, -1));
 
-        Adeudos_mes.setBackground(new java.awt.Color(255, 255, 255));
-        Adeudos_mes.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(Adeudos_mes);
 
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 110, 100));
 
-        Adeudo_deuda.setBackground(new java.awt.Color(255, 255, 255));
-        Adeudo_deuda.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane3.setViewportView(Adeudo_deuda);
 
         add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 80, 100));
 
         Cambio.setEditable(false);
         Cambio.setBackground(new java.awt.Color(255, 255, 255));
-        Cambio.setForeground(new java.awt.Color(0, 0, 0));
         Cambio.setText("$0");
         add(Cambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 80, 40));
 
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Cambio:");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 290, -1, 20));
 
         recibido.setEditable(false);
         recibido.setBackground(new java.awt.Color(255, 255, 255));
-        recibido.setForeground(new java.awt.Color(0, 0, 0));
         recibido.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 recibidoKeyReleased(evt);
@@ -397,7 +364,6 @@ public class Pago extends javax.swing.JPanel {
         add(recibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 130, 40));
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Cantidad recibida:");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, -1, 20));
     }// </editor-fold>//GEN-END:initComponents
@@ -473,7 +439,7 @@ public class Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_BusquedaMousePressed
     int contrato_id = 0;
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
-
+        System.out.println("boton");
         if (!N_cte.getText().isEmpty()) {
             N_cte.setText("");
             Contrato.setText("");
@@ -504,6 +470,7 @@ public class Pago extends javax.swing.JPanel {
         if (Busqueda.getSelectedItem().equals("Selecciona una opción") || Dato.getText().isEmpty()) {
             MensajeError("Debe ingresar y elegir el tipo de dato para la busqueda", Dato);
         } else {
+            System.out.println("entrando al hilo");
             new Hilos().show();
         }
     }//GEN-LAST:event_BuscarActionPerformed
@@ -615,8 +582,10 @@ public class Pago extends javax.swing.JPanel {
 
         @Override
         public void run() {
+            
             Cargando.setVisible(true);
-
+            System.out.println("hilo");
+            pie_pagina();
             if (Busqueda.getSelectedItem().equals("Folio contrato")) {
                 contrato(Dato.getText());
                 Cargando.setVisible(false);
@@ -632,6 +601,7 @@ public class Pago extends javax.swing.JPanel {
 
         }
     }
+    
 
     private void MensajeError(String campo_e, Component campo) {
         JOptionPane.showMessageDialog(null, campo_e, " AVISO", JOptionPane.INFORMATION_MESSAGE);
@@ -687,6 +657,19 @@ public class Pago extends javax.swing.JPanel {
             Mes_pagar.setText("No hay deudas");
         }
     }
+    String nombre_e;
+    String savc;
+    String muni, estado,rfc;
+    String pie_pag;
+    
+    private void pie_pagina() {
+        InformativoServicio info = new InformativoServicio();
+        List<pie_pagina> listas = info.MostrarPie_Pagina();
+        int tam = listas.size();
+        for (int i = 0; i < tam; i++) {
+            pie_pag = listas.get(i).getPie_pagina();
+        }
+    }
 
     String Lectura_pago;
     String Fecha_pago;
@@ -738,6 +721,7 @@ public class Pago extends javax.swing.JPanel {
     }
 
     private void cte() {
+        System.out.println("cte");
         ClienteServicio cs = new ClienteServicio();
         List<Cliente> lista = cs.PagoCl_cte(Integer.parseInt(Dato.getText()));
         int tam = lista.size();
@@ -919,19 +903,26 @@ public class Pago extends javax.swing.JPanel {
 
     private void InsertarTicket() {
         TicketServicio ts = new TicketServicio();
+        System.out.println(Lectura_pago + " " + consec_abono);
         ticket = ts.InsertTicket(Integer.parseInt(Lectura_pago), consec_abono);
+        ticket_generado tg = new ticket_generado();
+        tg.setNombre_empresa(nombre_e+", ");
+        tg.setS_a_c_v(savc);
+        tg.setMunicipio(muni);
+        tg.setEstado(estado);
+        tg.setRfc(rfc);
+        System.out.println(ticket);
         if (ticket == -1) {
-            MensajeError("Ticket no pudo ser registrado", Dato);
+            JOptionPane.showMessageDialog(null, "Ticket no registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setPrintable(new BillPrintable(), getPageFormat(pj));
-            try {
-
-                pj.print();
-                Generando.setVisible(false);
-            } catch (PrinterException ex) {
-                ex.printStackTrace();
-            }
+            
+            Generar_ticket gt = new Generar_ticket("null");
+            gt.setSize(1022, 510);
+            gt.setLocation(0, 0);
+            content.removeAll();
+            content.add(gt, BorderLayout.CENTER);
+            content.revalidate();
+            content.repaint();
         }
     }
 

@@ -15,6 +15,8 @@ public class ContratosC extends javax.swing.JDialog {
 
     int cerrar = 0;
     int aceptar = 0;
+    String ubicacion;
+    int Xmouse, Ymouse;
 
     public ContratosC(int folio, String ubicacion) {
         initComponents();
@@ -22,6 +24,7 @@ public class ContratosC extends javax.swing.JDialog {
         Folio.setVisible(false);
         this.setLocationRelativeTo(null);
         if (ubicacion.equals("contrato")) {
+            this.ubicacion = ubicacion;
             nombre.setVisible(false);
             Nombre.setVisible(false);
             ClientesC(folio);
@@ -37,6 +40,7 @@ public class ContratosC extends javax.swing.JDialog {
         aceptar = 1;
         this.setLocationRelativeTo(null);
         if (ubicacion.equals("Contrato")) {
+            this.ubicacion = ubicacion;
             ContratosC(folio);
         }
         Mostrar.addMouseListener(new MouseAdapter() {
@@ -66,12 +70,15 @@ public class ContratosC extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         Mostrar = new javax.swing.JTable();
         Folio = new javax.swing.JTextField();
-        Cerrar = new javax.swing.JButton();
         Nombre = new javax.swing.JLabel();
         nombre = new javax.swing.JLabel();
+        Cancelar = new javax.swing.JButton();
+        Cerrar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         Error = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
             }
@@ -85,7 +92,8 @@ public class ContratosC extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 153)));
+        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Mostrar.setModel(new javax.swing.table.DefaultTableModel(
@@ -98,31 +106,66 @@ public class ContratosC extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(Mostrar);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 637, 120));
-        jPanel1.add(Folio, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, 60, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 640, 200));
 
-        Cerrar.setText("Cerrar");
+        Folio.setForeground(new java.awt.Color(255, 255, 255));
+        Folio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FolioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Folio, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 250, 60, -1));
+
+        Nombre.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 230, 20));
+
+        nombre.setForeground(new java.awt.Color(255, 255, 255));
+        nombre.setText("Nombre:");
+        jPanel1.add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, 20));
+
+        Cancelar.setBackground(new java.awt.Color(18, 90, 173));
+        Cancelar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        Cancelar.setForeground(new java.awt.Color(255, 255, 255));
+        Cancelar.setText("Cerrar");
+        Cancelar.setBorder(null);
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 120, 40));
+
+        Cerrar.setBackground(new java.awt.Color(18, 90, 173));
+        Cerrar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        Cerrar.setForeground(new java.awt.Color(255, 255, 255));
+        Cerrar.setText("Aceptar");
+        Cerrar.setBorder(null);
         Cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CerrarActionPerformed(evt);
             }
         });
-        Cerrar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                CerrarKeyTyped(evt);
+        jPanel1.add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 120, 40));
+
+        jLabel1.setBackground(new java.awt.Color(18, 90, 173));
+        jLabel1.setOpaque(true);
+        jLabel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jLabel1MouseDragged(evt);
             }
         });
-        jPanel1.add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
-        jPanel1.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 230, 20));
-
-        nombre.setText("Nombre:");
-        jPanel1.add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 20));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel1MousePressed(evt);
+            }
+        });
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 40));
 
         Error.setBackground(new java.awt.Color(255, 255, 255));
         Error.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         Error.setForeground(new java.awt.Color(0, 0, 0));
         Error.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(Error, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 160));
+        jPanel1.add(Error, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 340));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,22 +175,12 @@ public class ContratosC extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 Cliente cl = new Cliente();
-    
-    private void CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarActionPerformed
-        cerrar = 1;
-        if (Cerrar.getText().equals("Aceptar")) {
-            Interfaz2.eventos.post(Folio.getText());
-            this.dispose();
-        } else {
-            this.dispose();
-        }
-    }//GEN-LAST:event_CerrarActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 
@@ -159,12 +192,43 @@ Cliente cl = new Cliente();
                 this.setVisible(true);
             }
         }
-
     }//GEN-LAST:event_formWindowDeactivated
 
-    private void CerrarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CerrarKeyTyped
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        cerrar = 1;
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
 
-    }//GEN-LAST:event_CerrarKeyTyped
+    private void CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarActionPerformed
+        cerrar = 1;
+        if (Cerrar.getText().equals("Aceptar")) {
+            if (ubicacion.equals("Contrato")) {
+                Interfaz2.pago.post(Folio.getText());
+                this.dispose();
+            }
+            if (ubicacion.equals("contrato")) {
+                Interfaz2.eventos.post(Folio.getText());
+                this.dispose();
+            }
+        } else {
+            this.dispose();
+        }
+    }//GEN-LAST:event_CerrarActionPerformed
+
+    private void FolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FolioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FolioActionPerformed
+
+    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
+        Xmouse = evt.getX();
+        Ymouse = evt.getY();
+    }//GEN-LAST:event_jLabel1MousePressed
+
+    private void jLabel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - Xmouse, y - Ymouse);
+    }//GEN-LAST:event_jLabel1MouseDragged
 
     private void ContratosC(int folio) {
         ContratoServicio cts = new ContratoServicio();
@@ -234,11 +298,13 @@ Cliente cl = new Cliente();
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Cancelar;
     private javax.swing.JButton Cerrar;
     private javax.swing.JLabel Error;
     private javax.swing.JTextField Folio;
     private javax.swing.JTable Mostrar;
     private javax.swing.JLabel Nombre;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nombre;

@@ -4,6 +4,8 @@ import Entity.Contrato;
 import Entity.Contrato_generado;
 import Entity.ErrorsAndSuccesses;
 import Entity.Informativo;
+import Entity.Jasper;
+import Entity.MiRenderer;
 import Servicio.ContratoServicio;
 import Servicio.InformativoServicio;
 import static Vista.Interfaz2.content;
@@ -12,11 +14,13 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.greenrobot.eventbus.Subscribe;
 
 public class Contrato_v extends javax.swing.JPanel {
@@ -61,7 +65,13 @@ public class Contrato_v extends javax.swing.JPanel {
 
         });
     }
-
+    public void setCellRender(JTable table) {
+        Enumeration<TableColumn> en = table.getColumnModel().getColumns();
+        while (en.hasMoreElements()) {
+            TableColumn tc = en.nextElement();
+            tc.setCellRenderer(new MiRenderer());
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -331,13 +341,14 @@ public class Contrato_v extends javax.swing.JPanel {
             GetContratos();
             Informativo();
             Cargando.setVisible(false);
+            setCellRender(Mostrar);
             Mostrar.setVisible(true);
             jScrollPane2.setVisible(true);
         }
     }
-    
+
     String informativos;
-    
+
     private void Informativo() {
         InformativoServicio info = new InformativoServicio();
         List<Informativo> listas = info.MostrarInformacion();
@@ -357,22 +368,13 @@ public class Contrato_v extends javax.swing.JPanel {
         if (tam > 0) {
             for (int i = 0; i < tam; i++) {
                 cg.setFolio_contrato(lista.get(i).getFolioContrato());
-                cg.setFolio_cliente(lista.get(i).getFolio_cte());
-                cg.setNombre_cliente(lista.get(i).getNombre());
                 cg.setCreacion_contrato(lista.get(i).getCreacion_contrato());
-                cg.setDireccion(lista.get(i).getMunicipio() + ", " + lista.get(i).getResidencia() + ", " + lista.get(i).getNombreCalle());
-                cg.setManzana(lista.get(i).getNumeroMzn().toString());
-                cg.setLote(lista.get(i).getNumeroLt().toString());
                 cg.setInformativo(informativos);
             }
-            Generar_contrato gc = new Generar_contrato("null");
-            gc.setSize(1030, 479);
-            gc.setLocation(0, 0);
+            
+            Jasper js = new Jasper();
+            js.generar_contraro();
 
-            content.removeAll();
-            content.add(gc, BorderLayout.CENTER);
-            content.revalidate();
-            content.repaint();
         } else {
             JOptionPane.showMessageDialog(null, "Hubo un error en la ejecucion", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -437,7 +439,7 @@ public class Contrato_v extends javax.swing.JPanel {
     }
 
     private void NewContrato() {
-        Contrato_regis p1 = new Contrato_regis(Integer.parseInt(usrnm.getText()), "contrato");
+        Contrato_regis p1 = new Contrato_regis(Integer.parseInt(usrnm.getText()), "insert contrato");
         p1.setSize(1030, 479);
         p1.setLocation(0, 0);
 

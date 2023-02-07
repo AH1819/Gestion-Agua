@@ -1,18 +1,30 @@
 package Vista;
 
+import Conexion.Conexion;
 import Entity.Contrato_generado;
 import Entity.ErrorsAndSuccesses;
 import java.time.LocalDate;
 import java.awt.*;
 import java.awt.print.*;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class Generar_contrato extends javax.swing.JPanel implements Printable {
 
     String ubicacion;
     ErrorsAndSuccesses es = new ErrorsAndSuccesses();
+    
 
     public Generar_contrato(String ubicacion) {
         initComponents();
@@ -21,7 +33,7 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         LocalDate now = LocalDate.now();
         System.out.println("");
         ImageIcon imgIcon = new ImageIcon(getClass().getResource("/Imagenes/logogspa.png"));
-        Image imgEscalada = imgIcon.getImage().getScaledInstance(415,145, Image.SCALE_SMOOTH);
+        Image imgEscalada = imgIcon.getImage().getScaledInstance(415, 145, Image.SCALE_SMOOTH);
         Icon iconoEscalado = new ImageIcon(imgEscalada);
 
         Logo.setIcon(iconoEscalado);
@@ -39,8 +51,10 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         lote.setText(cg.getLote());
         folio_contrato.setText(cg.getFolio_contrato().toString());
         folio_cte.setText(cg.getFolio_cliente().toString());
-        informativo.setText("<html><center>"+cg.getInformativo());
-        creacion.setText(cg.getCreacion_contrato().toString());
+        informativo.setText("<html><center>" + cg.getInformativo());
+        
+
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -201,11 +215,11 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Fecha de creación:");
-        Imprimir.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 150, -1, -1));
+        Imprimir.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 160, -1));
 
         creacion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         creacion.setForeground(new java.awt.Color(0, 0, 0));
-        Imprimir.add(creacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 150, 150, 20));
+        Imprimir.add(creacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 150, 290, 20));
 
         add(Imprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 440));
     }// </editor-fold>//GEN-END:initComponents
@@ -232,9 +246,9 @@ public class Generar_contrato extends javax.swing.JPanel implements Printable {
             JOptionPane.showMessageDialog(this, "Error al imprimir", "Impresion", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    private void fecha_contrato(){
-        
+
+    private void fecha_contrato() {
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

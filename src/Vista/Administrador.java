@@ -5,34 +5,73 @@ import Entity.Cat_descuento;
 import Entity.Cat_periodo;
 import Entity.Contrato;
 import Entity.DetTipoconsumoTarifa;
+import Entity.Jasper;
 import Entity.LecturaPago;
+import Entity.MiRenderer;
+import Entity.Reportes;
 import Servicio.CatalogosServicio;
 import Servicio.ContratoServicio;
 import Servicio.DescuentoServicio;
 import Servicio.LecturaPagoServicio;
+import Servicio.ReportesServicio;
 import Servicio.TarifaServicio;
+import com.lowagie.text.Table;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class Administrador extends javax.swing.JPanel {
 
     boolean c;
     boolean validator = false;
     boolean Precio_fijo = false;
-    String nombresIndex[] = {"Lecturas", "Catalogó consumo", "Catalogó tarifa", "Catalogó periodo", "Descuentos"};
+    String nombresIndex[] = {"Lecturas", "Catalogó consumo", "Catalogó tarifa", "Catalogó periodo", "Descuentos", "Reportes"};
 
     public Administrador() {
         initComponents();
+        Imprimir.setVisible(false);
         Importe.setVisible(false);
         Cargando.setVisible(true);
-        //new MostrarLecturas().show();
+        Consumos.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent evt) {
+                JTable table = (JTable) evt.getSource();
+                Point point = evt.getPoint();
+                int row = Consumos.rowAtPoint(point);
+
+                if (evt.getClickCount() == 2) {
+                    try {
+                        boolean status = Vali(Consumos);
+                        if (status) {
+                            Id_tipo.setText(Consumos.getValueAt(Consumos.getSelectedRow(), 0).toString());
+                            Tipo.setText(Consumos.getValueAt(Consumos.getSelectedRow(), 1).toString());
+                        }
+                    } catch (Exception e) {
+                        evt.consume();
+                    }
+                }
+            }
+        });
+    }
+
+    public void setCellRender(JTable table) {
+        Enumeration<TableColumn> en = table.getColumnModel().getColumns();
+        while (en.hasMoreElements()) {
+            TableColumn tc = en.nextElement();
+            tc.setCellRenderer(new MiRenderer());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -63,7 +102,6 @@ public class Administrador extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         ScrollPanel1 = new javax.swing.JScrollPane();
         Consumos = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
         jPanel9 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         Tipo_Consumo = new javax.swing.JTextField();
@@ -72,7 +110,7 @@ public class Administrador extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         Id_tipo = new javax.swing.JTextField();
         Buscar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        Tipo = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         ScrollPanel2 = new javax.swing.JScrollPane();
         Tarifas = new javax.swing.JTable();
@@ -98,6 +136,11 @@ public class Administrador extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         ScrollPanel3 = new javax.swing.JScrollPane();
         Descuentos = new javax.swing.JTable();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Deudores = new javax.swing.JTable();
+        Imprimir = new javax.swing.JButton();
+        Reportes_selected = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -274,9 +317,6 @@ public class Administrador extends javax.swing.JPanel {
 
         jPanel2.add(ScrollPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 6, 410, 270));
 
-        jToolBar1.setRollover(true);
-        jPanel2.add(jToolBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 20, 280));
-
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel12.setText("Tipo de consumo:");
@@ -287,6 +327,8 @@ public class Administrador extends javax.swing.JPanel {
             }
         });
 
+        Guardar_Consumo.setBackground(new java.awt.Color(18, 90, 173));
+        Guardar_Consumo.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         Guardar_Consumo.setText("Guardar");
         Guardar_Consumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,14 +381,16 @@ public class Administrador extends javax.swing.JPanel {
         });
         jPanel2.add(Id_tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 336, 76, -1));
 
+        Buscar.setBackground(new java.awt.Color(18, 90, 173));
+        Buscar.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         Buscar.setText("Buscar");
         Buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BuscarActionPerformed(evt);
             }
         });
-        jPanel2.add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 76, 30));
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 170, -1));
+        jPanel2.add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 330, 90, 30));
+        jPanel2.add(Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 170, -1));
 
         Principal.addTab("Catalogó consumo", jPanel2);
 
@@ -379,6 +423,8 @@ public class Administrador extends javax.swing.JPanel {
 
         jLabel9.setText("Tarifa:");
 
+        jButton1.setBackground(new java.awt.Color(18, 90, 173));
+        jButton1.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         jButton1.setText("Guardar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -428,7 +474,7 @@ public class Administrador extends javax.swing.JPanel {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Consec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 60, 410, 140));
@@ -463,6 +509,8 @@ public class Administrador extends javax.swing.JPanel {
 
         jLabel11.setText("Mes:");
 
+        jButton2.setBackground(new java.awt.Color(18, 90, 173));
+        jButton2.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         jButton2.setText("Guardar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -490,12 +538,12 @@ public class Administrador extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(66, 66, 66))
+                .addGap(56, 56, 56))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(44, Short.MAX_VALUE)
+                .addContainerGap(43, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11))
@@ -536,8 +584,277 @@ public class Administrador extends javax.swing.JPanel {
 
         Principal.addTab("Descuentos", jPanel4);
 
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Deudores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(Deudores);
+
+        jPanel6.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 670, -1));
+
+        Imprimir.setBackground(new java.awt.Color(18, 90, 173));
+        Imprimir.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
+        Imprimir.setForeground(new java.awt.Color(255, 255, 255));
+        Imprimir.setText("Imprimir");
+        Imprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImprimirActionPerformed(evt);
+            }
+        });
+        jPanel6.add(Imprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, 100, 30));
+
+        Reportes_selected.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Reportes", "Reporte de adeudos" }));
+        Reportes_selected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Reportes_selectedActionPerformed(evt);
+            }
+        });
+        jPanel6.add(Reportes_selected, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 20, 280, -1));
+
+        Principal.addTab("Reportes", jPanel6);
+
         add(Principal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 510));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void PrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_PrincipalStateChanged
+        int indice = Principal.getSelectedIndex();
+
+        switch (nombresIndex[indice]) {
+            case "Lecturas":
+                new MostrarLecturas().show();
+                break;
+            case "Catalogó consumo":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        CargarConsumo();
+                    }
+                }.start();
+                break;
+            case "Catalogó tarifa":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        CargarTarifas();
+                    }
+                }.start();
+                break;
+            case "Catalogó periodo":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        CargarPeriodos();
+                    }
+                }.start();
+                break;
+            case "Descuentos":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        CargarDescuentos();
+                    }
+                }.start();
+                break;
+            case "Reportes":
+
+                break;
+        }
+    }//GEN-LAST:event_PrincipalStateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        CatalogosServicio cs = new CatalogosServicio();
+        if (!Tipo_p.getText().isEmpty() && !Mes_p.getText().isEmpty()) {
+            boolean status = cs.Insertar_Periodo(Tipo_p.getText(), Integer.parseInt(Mes_p.getText()));
+            if (status) {
+                JOptionPane.showMessageDialog(null, "Registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No pudo ser registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        TarifaServicio ts = new TarifaServicio();
+        int id_cons = 0;
+        for (int i = 0; i < ConsumoS.length; i++) {
+            if (id_consumo.getSelectedItem().equals(ConsumoS[i])) {
+                id_cons = Integer.parseInt(ConsumoS[i]);
+            }
+        }
+
+        if (id_consumo.getSelectedIndex() >= 0 && !Tarifa.getText().isEmpty()) {
+            boolean status = ts.Insertar_Tarifa(Integer.parseInt(Consec.getSelectedItem().toString()),
+                    id_cons, Double.parseDouble(Tarifa.getText()));
+            if (status) {
+                JOptionPane.showMessageDialog(null, "Registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No pudo ser registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        /*CatalogosServicio cs = new CatalogosServicio();
+        if (!Id_tipo.getText().isEmpty()) {
+            for (int i = 0; i < Consumos.getRowCount(); i++) {
+                if (!Consumos.getValueAt(i, 1).toString().toLowerCase().equals(Id_tipo.getText())
+                        && !Consumos.getValueAt(i, 1).toString().equals(Id_tipo.getText())) {
+                    if (cs.Insertar_Consumo(Id_tipo.getText())) {
+                        JOptionPane.showMessageDialog(null, "Tipo de consumo registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                CargarConsumo();
+                            }
+                        }.start();
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo registrar", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tipo de consumo ya registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe llenar el campo", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }*/
+    }//GEN-LAST:event_BuscarActionPerformed
+
+    private void Id_tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Id_tipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Id_tipoActionPerformed
+
+    private void Guardar_ConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Guardar_ConsumoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Guardar_ConsumoActionPerformed
+
+    private void Tipo_ConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tipo_ConsumoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Tipo_ConsumoActionPerformed
+
+    private void fijoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fijoActionPerformed
+        if (fijo.isSelected()) {
+            Inicial.setEnabled(false);
+            LFinal.setEnabled(false);
+            Consumo.setEnabled(false);
+            Importe.setVisible(true);
+            Precio_fijo = true;
+        } else {
+            Inicial.setEnabled(true);
+            LFinal.setEnabled(true);
+            Consumo.setEnabled(true);
+            Importe.setVisible(false);
+            Precio_fijo = false;
+        }
+    }//GEN-LAST:event_fijoActionPerformed
+
+    private void id_mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_id_mesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_id_mesActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        BuscarLecturas(Integer.parseInt(Dato.getText()));
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void DatoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_DatoKeyTyped
+
+    private void DatoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatoKeyReleased
+        if (evt.getKeyCode() == 10) {
+
+            if (Dato.getText().isEmpty() || Dato.getText().equals("  Ingresa el folio del contrato")) {
+                JOptionPane.showMessageDialog(null, "Los campos no estan llenos", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                new Thread() {
+                    public void run() {
+                        BuscarLecturas(Integer.parseInt(Dato.getText()));
+                    }
+                }.start();
+            }
+        }
+    }//GEN-LAST:event_DatoKeyReleased
+
+    private void DatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DatoActionPerformed
+
+    private void DatoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusLost
+        if (Dato.getText().isEmpty()) {
+            Dato.setText("Ingresa el folio del contrato");
+        }
+    }//GEN-LAST:event_DatoFocusLost
+
+    private void DatoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusGained
+        if (Dato.getText().equals("Ingresa el folio del contrato")) {
+            Dato.setText("");
+        }
+    }//GEN-LAST:event_DatoFocusGained
+
+    private void LFinalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LFinalKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_LFinalKeyTyped
+
+    private void LFinalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LFinalKeyReleased
+        String lfinal = LFinal.getText();
+        String linicial = Inicial.getText();
+
+        double x1 = Double.parseDouble(lfinal);
+        double x2 = Double.parseDouble(linicial);
+
+        if (x2 < x1) {
+            double resultado = x1 - x2;
+            Consumo.setForeground(Color.black);
+            Consumo.setText(String.valueOf(resultado));
+            c = true;
+        } else {
+            Consumo.setForeground(Color.red);
+            double resultado = x1 - x2;
+            Consumo.setText(String.valueOf(resultado));
+
+            c = false;
+        }
+    }//GEN-LAST:event_LFinalKeyReleased
+
+    private void LFinalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LFinalFocusLost
+        if (LFinal.getText().isEmpty()) {
+            LFinal.setText("Lectura final");
+        }
+    }//GEN-LAST:event_LFinalFocusLost
+
+    private void LFinalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LFinalFocusGained
+        if (LFinal.getText().equals("Lectura final")) {
+            LFinal.setText("");
+        }
+    }//GEN-LAST:event_LFinalFocusGained
+
+    private void InicialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_InicialKeyReleased
+
+    }//GEN-LAST:event_InicialKeyReleased
+
+    private void InicialFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_InicialFocusGained
+
+    }//GEN-LAST:event_InicialFocusGained
 
     private void Guardar_LecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Guardar_LecturaActionPerformed
         if (c) {
@@ -603,238 +920,34 @@ public class Administrador extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_Guardar_LecturaActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        BuscarLecturas(Integer.parseInt(Dato.getText()));
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void DatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DatoActionPerformed
-
-    private void id_mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_id_mesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_id_mesActionPerformed
-
-    private void LFinalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LFinalKeyReleased
-        String lfinal = LFinal.getText();
-        String linicial = Inicial.getText();
-
-        double x1 = Double.parseDouble(lfinal);
-        double x2 = Double.parseDouble(linicial);
-
-        if (x2 < x1) {
-            double resultado = x1 - x2;
-            Consumo.setForeground(Color.black);
-            Consumo.setText(String.valueOf(resultado));
-            c = true;
-        } else {
-            Consumo.setForeground(Color.red);
-            double resultado = x1 - x2;
-            Consumo.setText(String.valueOf(resultado));
-
-            c = false;
-        }
-
-    }//GEN-LAST:event_LFinalKeyReleased
-
-    private void InicialFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_InicialFocusGained
-
-    }//GEN-LAST:event_InicialFocusGained
-
-    private void LFinalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LFinalFocusGained
-        if (LFinal.getText().equals("Lectura final")) {
-            LFinal.setText("");
-        }
-    }//GEN-LAST:event_LFinalFocusGained
-
-    private void DatoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatoKeyReleased
-        if (evt.getKeyCode() == 10) {
-
-            if (Dato.getText().isEmpty() || Dato.getText().equals("  Ingresa el folio del contrato")) {
-                JOptionPane.showMessageDialog(null, "Los campos no estan llenos", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-
-            } else {
+    private void ImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImprimirActionPerformed
+        if (Reportes_selected.getSelectedIndex() > 0) {
+            if (Reportes_selected.getSelectedIndex() == 1) {
                 new Thread() {
                     public void run() {
-                        BuscarLecturas(Integer.parseInt(Dato.getText()));
+                        Jasper js = new Jasper();
+                        js.Generar_Reporte();
                     }
                 }.start();
             }
         }
-    }//GEN-LAST:event_DatoKeyReleased
+    }//GEN-LAST:event_ImprimirActionPerformed
 
-    private void InicialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_InicialKeyReleased
-
-    }//GEN-LAST:event_InicialKeyReleased
-
-    private void DatoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusGained
-        if (Dato.getText().equals("Ingresa el folio del contrato")) {
-            Dato.setText("");
-        }
-    }//GEN-LAST:event_DatoFocusGained
-
-    private void DatoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DatoFocusLost
-        if (Dato.getText().isEmpty()) {
-            Dato.setText("Ingresa el folio del contrato");
-        }
-    }//GEN-LAST:event_DatoFocusLost
-
-    private void LFinalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LFinalFocusLost
-        if (LFinal.getText().isEmpty()) {
-            LFinal.setText("Lectura final");
-        }
-    }//GEN-LAST:event_LFinalFocusLost
-
-    private void LFinalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LFinalKeyTyped
-        int key = evt.getKeyChar();
-
-        boolean numeros = key >= 48 && key <= 57;
-
-        if (!numeros) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_LFinalKeyTyped
-
-    private void DatoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatoKeyTyped
-        int key = evt.getKeyChar();
-
-        boolean numeros = key >= 48 && key <= 57;
-
-        if (!numeros) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_DatoKeyTyped
-
-    private void fijoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fijoActionPerformed
-        if (fijo.isSelected()) {
-            Inicial.setEnabled(false);
-            LFinal.setEnabled(false);
-            Consumo.setEnabled(false);
-            Importe.setVisible(true);
-            Precio_fijo = true;
-        } else {
-            Inicial.setEnabled(true);
-            LFinal.setEnabled(true);
-            Consumo.setEnabled(true);
-            Importe.setVisible(false);
-            Precio_fijo = false;
-        }
-
-    }//GEN-LAST:event_fijoActionPerformed
-
-    private void PrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_PrincipalStateChanged
-        int indice = Principal.getSelectedIndex();
-
-        switch (nombresIndex[indice]) {
-            case "Lecturas":
-                new MostrarLecturas().show();
-                break;
-            case "Catalogó consumo":
+    private void Reportes_selectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reportes_selectedActionPerformed
+        if (Reportes_selected.getSelectedIndex() > 0) {
+            Imprimir.setVisible(true);
+            if (Reportes_selected.getSelectedIndex() == 1) {
                 new Thread() {
                     @Override
                     public void run() {
-                        CargarConsumo();
+                        adeudos();
                     }
                 }.start();
-                break;
-            case "Catalogó tarifa":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        CargarTarifas();
-                    }
-                }.start();
-                break;
-            case "Catalogó periodo":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        CargarPeriodos();
-                    }
-                }.start();
-                break;
-            case "Descuentos":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        CargarDescuentos();
-                    }
-                }.start();
-                break;
-        }
-    }//GEN-LAST:event_PrincipalStateChanged
-
-    private void Id_tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Id_tipoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Id_tipoActionPerformed
-
-    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
-        CatalogosServicio cs = new CatalogosServicio();
-        if (!Id_tipo.getText().isEmpty()) {
-            for (int i = 0; i < Consumos.getRowCount(); i++) {
-                if (!Consumos.getValueAt(i, 1).toString().toLowerCase().equals(Id_tipo.getText())
-                        && !Consumos.getValueAt(i, 1).toString().equals(Id_tipo.getText())) {
-                    if (cs.Insertar_Consumo(Id_tipo.getText())) {
-                        JOptionPane.showMessageDialog(null, "Tipo de consumo registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                CargarConsumo();
-                            }
-                        }.start();
-                        break;
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo registrar", "Error", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Tipo de consumo ya registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                }
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Debe llenar el campo", "Error", JOptionPane.INFORMATION_MESSAGE);
+            Imprimir.setVisible(false);
         }
-    }//GEN-LAST:event_BuscarActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        CatalogosServicio cs = new CatalogosServicio();
-        if (!Tipo_p.getText().isEmpty() && !Mes_p.getText().isEmpty()) {
-            boolean status = cs.Insertar_Periodo(Tipo_p.getText(), Integer.parseInt(Mes_p.getText()));
-            if (status) {
-                JOptionPane.showMessageDialog(null, "Registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "No pudo ser registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TarifaServicio ts = new TarifaServicio();
-        int id_cons = 0;
-        for (int i = 0; i < ConsumoS.length; i++) {
-            if (id_consumo.getSelectedItem().equals(ConsumoS[i])) {
-                id_cons = Integer.parseInt(ConsumoS[i]);
-            }
-        }
-
-        if (id_consumo.getSelectedIndex() >= 0 && !Tarifa.getText().isEmpty()) {
-            boolean status = ts.Insertar_Tarifa(Integer.parseInt(Consec.getSelectedItem().toString()),
-                    id_cons, Double.parseDouble(Tarifa.getText()));
-            if (status) {
-                JOptionPane.showMessageDialog(null, "Registrado", "!Exito¡", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "No pudo ser registrado", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void Tipo_ConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tipo_ConsumoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Tipo_ConsumoActionPerformed
-
-    private void Guardar_ConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Guardar_ConsumoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Guardar_ConsumoActionPerformed
+    }//GEN-LAST:event_Reportes_selectedActionPerformed
     public class MostrarLecturas implements Runnable {
 
         public void show() {
@@ -855,6 +968,17 @@ public class Administrador extends javax.swing.JPanel {
             ScrollPanel.setVisible(true);
             lectura.setVisible(true);
         }
+    }
+
+    private boolean Vali(JTable tabla) {
+        boolean status = false;
+        int idcell = tabla.getSelectedRow();
+        if (idcell > -1) {
+            status = true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar el registro a modificar. \n", "AVISO", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return status;
     }
 
     private void InsertarLecturaPagoFijo(float lecturapago, int folio, int mes) {
@@ -946,8 +1070,6 @@ public class Administrador extends javax.swing.JPanel {
         ContratoServicio cs = new ContratoServicio();
         List<Contrato> lista = cs.SearchContrato_c(folio);
         int tam = lista.size();
-        System.out.println(folio);
-        System.out.println(tam);
         if (tam == 0) {
             JOptionPane.showMessageDialog(this, "Contrato no registrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -1000,8 +1122,8 @@ public class Administrador extends javax.swing.JPanel {
             list[i][2] = String.valueOf(lista.get(i).getTarifa());
         }
         String head[] = {"N°", "Tipo de Consumo", "Tarifa"};
-        Integer TamaloColumna[] = {10, 50, 30};
-        Jtable(Tarifas, list, head, 3, TamaloColumna);
+        Integer TamañoColumna[] = {10, 50, 30};
+        Jtable(Tarifas, list, head, 3, TamañoColumna);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -1066,17 +1188,42 @@ public class Administrador extends javax.swing.JPanel {
     }
 
     ////////////////////////////////////////////////////////////////////////
+    //Reportes
+    private void adeudos() {
+        ReportesServicio RPS = new ReportesServicio();
+        List<Reportes> lista = RPS.Reporte_adeudos();
+        int tam = lista.size();
+        String list[][] = new String[tam][5];
+
+        for (int i = 0; i < tam; i++) {
+            list[i][0] = String.valueOf(lista.get(i).getId_contrato());
+            list[i][1] = lista.get(i).getNombre();
+            list[i][2] = lista.get(i).getMeses_adeudo();
+            list[i][3] = String.valueOf(lista.get(i).getCantidad());
+            list[i][4] = String.valueOf(lista.get(i).getTotal_deuda());
+        }
+        String head[] = {"N°", "Nombre", "Mes", "Cantidad", "Total de la deuda"};
+        Integer TamañoColumna[] = {10, 100, 50, 50, 10};
+        Jtable(Deudores, list, head, 5, TamañoColumna);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
     private void Jtable(JTable x, String list[][], String Head[], int columnas, Integer tamañoC[]) {
         if (list.length > 0) {
-            x.setModel(new javax.swing.table.DefaultTableModel(list, Head));
-            DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-            tcr.setHorizontalAlignment(SwingConstants.CENTER);
-            ((DefaultTableCellRenderer) x.getTableHeader().getDefaultRenderer())
-                    .setHorizontalAlignment(SwingConstants.CENTER);
+            x.setModel(new javax.swing.table.DefaultTableModel(list, Head) {
+                boolean[] canEdit = new boolean[]{
+                    false, false, false, false, false, false, false, false
+                };
+
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
             for (int i = 0; i < columnas; i++) {
                 x.getColumnModel().getColumn(i).setPreferredWidth(tamañoC[i]);
-                x.getColumnModel().getColumn(i).setCellRenderer(tcr);
             }
+            setCellRender(x);
         } else {
             x.setModel(new javax.swing.table.DefaultTableModel(list, Head));
         }
@@ -1089,16 +1236,19 @@ public class Administrador extends javax.swing.JPanel {
     private javax.swing.JTable Consumos;
     private javax.swing.JTextField Dato;
     private javax.swing.JTable Descuentos;
+    private javax.swing.JTable Deudores;
     private javax.swing.JButton Guardar_Consumo;
     private javax.swing.JButton Guardar_Lectura;
     private javax.swing.JTextField Id_tipo;
     private javax.swing.JTextField Importe;
+    private javax.swing.JButton Imprimir;
     private javax.swing.JTextArea Informacion;
     private javax.swing.JTextField Inicial;
     private javax.swing.JTextField LFinal;
     private javax.swing.JTextField Mes_p;
     private javax.swing.JTable Periodos;
     private javax.swing.JTabbedPane Principal;
+    private javax.swing.JComboBox<String> Reportes_selected;
     private javax.swing.JScrollPane ScrollPanel;
     private javax.swing.JScrollPane ScrollPanel1;
     private javax.swing.JScrollPane ScrollPanel2;
@@ -1106,6 +1256,7 @@ public class Administrador extends javax.swing.JPanel {
     private javax.swing.JScrollPane ScrollPanel4;
     private javax.swing.JTextField Tarifa;
     private javax.swing.JTable Tarifas;
+    private javax.swing.JTextField Tipo;
     private javax.swing.JTextField Tipo_Consumo;
     private javax.swing.JTextField Tipo_p;
     private javax.swing.JCheckBox fijo;
@@ -1134,12 +1285,12 @@ public class Administrador extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable lectura;
     // End of variables declaration//GEN-END:variables
 }

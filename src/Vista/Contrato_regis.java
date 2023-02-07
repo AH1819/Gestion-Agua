@@ -8,6 +8,7 @@ import Entity.Contrato_generado;
 import Entity.DetTipoconsumoTarifa;
 import Entity.ErrorsAndSuccesses;
 import Entity.Informativo;
+import Entity.Jasper;
 import Servicio.CatalogosServicio;
 import Servicio.ClienteServicio;
 import Servicio.ContratoServicio;
@@ -46,6 +47,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         GetConsumo();
         GetPeriodo();
         this.ubicacion = ubicacion;
+        es.setUbicacion(ubicacion);
         this.folio = cliente.getFolio();
         Existencia();
         if (opcion.equals("Si")) {
@@ -64,6 +66,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         GetConsumo();
         GetPeriodo();
         this.ubicacion = ubicacion;
+        es.setUbicacion(ubicacion);
         this.folio = folio;
         Folio.setText(String.valueOf(folio));
         nombre(folio);
@@ -79,6 +82,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         Tarifa.setVisible(false);
         Cargando.setVisible(false);
         this.ubicacion = ubicacion;
+        es.setUbicacion(ubicacion);
         this.folio_ct = folio;
         this.edit = edit;
         Folio.setText(String.valueOf(folio));
@@ -551,9 +555,11 @@ public class Contrato_regis extends javax.swing.JPanel {
             }
         }
 
-        for (String[] Tari : Tarifas) {
-            if (Tari[1].equals(Tarifa.getSelectedItem())) {
-                id = Integer.parseInt(Tari[0]);
+        if (Periodo.getSelectedIndex() > 0) {
+            for (String[] Tari : Tarifas) {
+                if (Tari[1].equals(Tarifa.getSelectedItem())) {
+                    id = Integer.parseInt(Tari[0]);
+                }
             }
         }
 
@@ -613,7 +619,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         if (ubicacion.equals("insert cliente")) {
             JOptionPane.showMessageDialog(this, "El contrato no puede ser cancelado", "Contrato", JOptionPane.INFORMATION_MESSAGE);
         }
-        if (ubicacion.equals("editar contrato")||ubicacion.equals("contrato")) {
+        if (ubicacion.equals("editar contrato") || ubicacion.equals("contrato")) {
             Contrato_v p1 = new Contrato_v();
             p1.setSize(1030, 500);
             p1.setLocation(0, 0);
@@ -713,7 +719,6 @@ public class Contrato_regis extends javax.swing.JPanel {
         @Override
         public void run() {
             GetTarifa(idconsumo);
-            System.out.println(idconsumo);
         }
     }
 
@@ -721,7 +726,7 @@ public class Contrato_regis extends javax.swing.JPanel {
 
         public void show() {
             new Thread(this).start();
-            
+
         }
 
         public void run() {
@@ -737,7 +742,7 @@ public class Contrato_regis extends javax.swing.JPanel {
         }
     }
     String informativos;
-    
+
     private void Informativo() {
         InformativoServicio info = new InformativoServicio();
         List<Informativo> listas = info.MostrarInformacion();
@@ -755,11 +760,16 @@ public class Contrato_regis extends javax.swing.JPanel {
         CatalogosServicio cs = new CatalogosServicio();
         List<Cat_Consumo> lista = cs.GetConsumo();
         int tam = lista.size();
-        Consumos = new String[tam][2];
-        for (int i = 0; i < tam; i++) {
-            Consumos[i][0] = lista.get(i).getId_consumo().toString();
-            Consumos[i][1] = lista.get(i).getTipo_consumo();
-            Consumo.addItem(lista.get(i).getTipo_consumo());
+        if (tam > 0) {
+            Consumos = new String[tam][2];
+            for (int i = 0; i < tam; i++) {
+                Consumos[i][0] = lista.get(i).getId_consumo().toString();
+                Consumos[i][1] = lista.get(i).getTipo_consumo();
+                Consumo.addItem(lista.get(i).getTipo_consumo());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontraron Consumos disponibles\n Consulte el problema con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
+            Registrar.setEnabled(false);
         }
     }
 
@@ -769,11 +779,16 @@ public class Contrato_regis extends javax.swing.JPanel {
         CatalogosServicio cs = new CatalogosServicio();
         List<Cat_periodo> lista = cs.GetPeriodo();
         int tam = lista.size();
-        Periodos = new String[tam][2];
-        for (int i = 0; i < tam; i++) {
-            Periodos[i][0] = lista.get(i).getId_periodo().toString();
-            Periodos[i][1] = lista.get(i).getTipo_periodo();
-            Periodo.addItem(lista.get(i).getTipo_periodo());
+        if (tam > 0) {
+            Periodos = new String[tam][2];
+            for (int i = 0; i < tam; i++) {
+                Periodos[i][0] = lista.get(i).getId_periodo().toString();
+                Periodos[i][1] = lista.get(i).getTipo_periodo();
+                Periodo.addItem(lista.get(i).getTipo_periodo());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontraron Periodos disponibles\n Consulte el problema con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
+            Registrar.setEnabled(false);
         }
     }
 
@@ -787,20 +802,22 @@ public class Contrato_regis extends javax.swing.JPanel {
         cg.setManzana(Manzana.getText());
         cg.setLote(Lote.getText());
         cg.setInformativo(informativos);
-        
+
         es.setResultinsert(cs.InsertarContrato(Municipio.getText(), Residencia.getText(), Nombre_calle.getText(), Referencia.getText(), observaciones, Integer.parseInt(Manzana.getText()), Integer.parseInt(Lote.getText()), id, idconsumo, idperiodo, folio, status));
         if (es.getResultinsert() == -1) {
             JOptionPane.showMessageDialog(null, "Hubo un error", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Contrato creado con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
-            cg = new Contrato_generado(folio, es.getResultinsert());
+            /* cg = new Contrato_generado(folio, es.getResultinsert());
             Generar_contrato gc = new Generar_contrato("null");
             gc.setSize(1030, 500);
             gc.setLocation(0, 0);
             content.removeAll();
             content.add(gc, BorderLayout.CENTER);
             content.revalidate();
-            content.repaint();
+            content.repaint();*/
+            Jasper js = new Jasper();
+            js.generar_contraro();
         }
     }
 
@@ -836,12 +853,18 @@ public class Contrato_regis extends javax.swing.JPanel {
         int tam = lista.size();
         Tarifa.removeAllItems();
         Tarifa.addItem("Selecciona una opción");
-        Tarifas = new String[tam][2];
-        for (int i = 0; i < tam; i++) {
-            Tarifas[i][0] = lista.get(i).getConsec().toString();
-            Tarifas[i][1] = lista.get(i).getTarifa().toString();
-            Tarifa.addItem(lista.get(i).getTarifa().toString());
+        if (tam > 0) {
+            Tarifas = new String[tam][2];
+            for (int i = 0; i < tam; i++) {
+                Tarifas[i][0] = lista.get(i).getConsec().toString();
+                Tarifas[i][1] = lista.get(i).getTarifa().toString();
+                Tarifa.addItem(lista.get(i).getTarifa().toString());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontraron Tarifas disponibles\n Consulte el problema con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
+            Registrar.setEnabled(false);
         }
+
     }
 
     private void Obtener(int folio) {

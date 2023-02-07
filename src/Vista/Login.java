@@ -145,6 +145,9 @@ public class Login extends javax.swing.JFrame {
             }
         });
         password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 passwordKeyReleased(evt);
             }
@@ -424,6 +427,10 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_EntertxtKeyReleased
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordKeyPressed
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -436,10 +443,8 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 
@@ -464,7 +469,7 @@ public class Login extends javax.swing.JFrame {
     private void CambiarConexion() {
         if (user.getText().equals(" Ingrese su nombre de usuario") || user.getText().isEmpty()
                 || password.getText().equals("********") || password.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Los campos no estan llenos", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            
         } else {
             Logeo p0 = new Logeo(user.getText(), password.getText());
             Conexion_login p1 = new Conexion_login();

@@ -72,31 +72,6 @@ public class CatalogosDao {
         return status;
     }
 
-   /* public boolean Existencia_Consumo(String tipo) {
-
-        boolean status = false;
-
-        String sql = "select * from cat_consumo where tipo_consumo = ? ";
-        PreparedStatement comando = null;
-
-        try {
-            comando = conexion.conectar().prepareStatement(sql);
-            comando.setString(1, tipo);
-            Resultado = comando.executeQuery();
-            if (Resultado.next()) {
-                status = true;
-            }
-
-            conexion.conectar().close();
-            comando.close();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CatalogosDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return status;
-    }*/
-
     public List<Cat_Consumo> GetConsumo() {
         List<Cat_Consumo> CC = new ArrayList<>();
 

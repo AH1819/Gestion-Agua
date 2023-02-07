@@ -2,7 +2,6 @@ package Vista;
 
 import Entity.Cliente;
 import Servicio.ClienteServicio;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -12,6 +11,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class Cliente_new_or_exist extends javax.swing.JDialog {
+
+    int Xmouse, Ymouse;
+    int cerrar = 0;
 
     public Cliente_new_or_exist() {
         initComponents();
@@ -65,6 +67,11 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowDeactivated(java.awt.event.WindowEvent evt) {
+                formWindowDeactivated(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -76,7 +83,17 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
         Title.setForeground(new java.awt.Color(0, 0, 0));
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Seleccione un cliente");
-        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 910, 40));
+        Title.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                TitleMouseDragged(evt);
+            }
+        });
+        Title.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TitleMousePressed(evt);
+            }
+        });
+        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 910, 50));
 
         Elegir.setBackground(new java.awt.Color(18, 90, 173));
         Elegir.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
@@ -141,12 +158,18 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        cerrar = 1;
         this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void ElegirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElegirActionPerformed
-        Interfaz2.eventos.post(Folio.getText());
-        this.dispose();
+        cerrar = 1;
+        if (Elegir.getText().equals("Elegir")) {
+            Interfaz2.eventos.post(Folio.getText());
+            this.dispose();
+        } else {
+            this.dispose();
+        }
     }//GEN-LAST:event_ElegirActionPerformed
 
     private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
@@ -154,6 +177,25 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
         Interfaz2.eventos.post(numero);
         this.dispose();
     }//GEN-LAST:event_CrearActionPerformed
+
+    private void TitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TitleMousePressed
+        Xmouse = evt.getX();
+        Ymouse = evt.getY();
+    }//GEN-LAST:event_TitleMousePressed
+
+    private void TitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TitleMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - Xmouse, y - Ymouse);
+    }//GEN-LAST:event_TitleMouseDragged
+
+    private void formWindowDeactivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowDeactivated
+        if (Elegir.getText().equals("Aceptar")) {
+            if (cerrar == 0) {
+                this.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_formWindowDeactivated
     private void Clientes() {
         ClienteServicio cs = new ClienteServicio();
         List<Cliente> lista = cs.MostrarClientes();
@@ -194,15 +236,15 @@ public class Cliente_new_or_exist extends javax.swing.JDialog {
         });
         if (Mostrar.getColumnModel().getColumnCount() > 0) {
             DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-                tcr.setHorizontalAlignment(SwingConstants.CENTER);
-                ((DefaultTableCellRenderer) Mostrar.getTableHeader().getDefaultRenderer())
-                        .setHorizontalAlignment(SwingConstants.CENTER);
+            tcr.setHorizontalAlignment(SwingConstants.CENTER);
+            ((DefaultTableCellRenderer) Mostrar.getTableHeader().getDefaultRenderer())
+                    .setHorizontalAlignment(SwingConstants.CENTER);
             Mostrar.getColumnModel().getColumn(0).setPreferredWidth(10);
             Mostrar.getColumnModel().getColumn(1).setPreferredWidth(200);
             Mostrar.getColumnModel().getColumn(6).setPreferredWidth(10);
         }
     }
-    
+
     private void Vali() {
         int idcell = Mostrar.getSelectedRow();
         if (idcell <= -1) {
